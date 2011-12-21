@@ -1,0 +1,190 @@
+{% extends "base-admin.html" %}
+
+{% block title %}
+Admin Menu
+{% endblock %}
+
+{% block content %}
+
+
+<!--  START CONTENT -->
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;>Admin Menu</h1>
+
+<div class="right-menu" style=padding:0;>
+	<div class="admin-side-menu">
+	<ul>
+	<li class="asm-events"><a href=#>Manage Events</a></li>
+	<li class="asm-news"><a href=#>Manage News</a></li>
+	<li class="asm-pages"><a href=#>Manage Pages</a></li>
+	<li class="asm-accounts"><a href=#>Manage Accounts</a></li>
+	<li class="asm-reports"><a href=#>Reports</a></li>
+	</ul>
+	</div>
+</div>
+
+<div class="right-menu">
+<h3 style=margin-bottom:10px;>General Site Stats</h3>
+	<div class=event_list_compact>
+		<table cellpadding=0 cellspacing=0 width=100%>
+		<tr class=el_title>
+				<td class=el_start><strong>Some Stat</strong></td>
+				<td class=el_end>12,456</td>
+		</tr>
+		<tr class=el_title>
+				<td class=el_start><strong>Another Stat</strong></td>
+				<td class=el_end>12,456</td>
+		</tr>
+		<tr class=el_title>
+				<td class=el_start><strong>Some Stat</strong></td>
+				<td class=el_end>12,456</td>
+		</tr>
+		</table>
+	</div>
+</div>
+
+</div>
+
+
+<!--  LEFT SIDE -->
+<h1>ADMIN HOME</h1>
+<div class="textholder">
+<h3 style="padding:10px 20px;">Pending Events</h3>
+<div class=event_list_compact>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Contact</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+<tr>
+<td class=el_start>11/27/11 2:00 PM</td>
+<td><a href=#>Virtual Thanksgiving Dinner</a></td>
+<td><a href=#>Ben Campos</a></td>
+<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>11/27/11 4:00 PM</td>
+<td><a href=#>Virtual Post-Thanksgiving Nap</a></td>
+<td><a href=#>Jesse Pinkman</a></td>
+<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>11/29/11 1:00 PM</td>
+<td><a href=#>System Maintenance</a></td>
+<td><a href=#>Nathan Drake</a></td>
+<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>12/10/11 4:30 PM</td>
+<td><a href=#>College of Engineering Tour</a></td>
+<td><a href=#>Tyler Durden</a></td>
+<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>12/21/11 3:00 PM</td>
+<td><a href=#>Advanced Chemistry Lesson</a></td>
+<td><a href=#>Walter White</a></td>
+<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
+</tr>
+</table>
+</div>
+</div>
+
+<div class="textholder">
+<h3 style="padding:10px 20px;">Upcoming Events</h3>
+<div class=event_list_compact>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Contact</strong></td>
+<td class=el_end><strong>Assigned Proctor</strong></td>
+</tr>
+<tr>
+<td class=el_start>11/27/11 2:00 PM</td>
+<td><a href=#>Virtual Thanksgiving Dinner</a></td>
+<td><a href=#>Ben Campos</a></td>
+<td class=el_end>Proctor 1</td>
+</tr>
+<tr>
+<td class=el_start>11/27/11 4:00 PM</td>
+<td><a href=#>Virtual Post-Thanksgiving Nap</a></td>
+<td><a href=#>Jesse Pinkman</a></td>
+<td class=el_end>Proctor 1, Proctor 2</td>
+</tr>
+<tr>
+<td class=el_start>11/29/11 1:00 PM</td>
+<td><a href=#>System Maintenance</a></td>
+<td><a href=#>Nathan Drake</a></td>
+<td class=el_end>Proctor 4</td>
+</tr>
+<tr>
+<td class=el_start>12/10/11 4:30 PM</td>
+<td><a href=#>College of Engineering Tour</a></td>
+<td><a href=#>Tyler Durden</a></td>
+<td class=el_end>Proctor 1, Proctor 2, Proctor 4</td>
+</tr>
+<tr>
+<td class=el_start>12/21/11 3:00 PM</td>
+<td><a href=#>Advanced Chemistry Lesson</a></td>
+<td><a href=#>Walter White</a></td>
+<td class=el_end>Proctor 3</a></td>
+</tr>
+</table>
+</div>
+</div>
+
+<div class="textholder">
+<h3 style="padding:10px 20px;">Most Recent News Articles</h3>
+<div class=event_list_compact>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+<td class=el_start><strong>Article Date</strong></td>
+<td><strong>Article Title</strong></td>
+<td><strong>Poster</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+<tr>
+<td class=el_start>11/27/11 2:00 PM</td>
+<td><a href=#>Virtual Thanksgiving Dinner</a></td>
+<td><a href=#>Ben Campos</a></td>
+<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>11/27/11 4:00 PM</td>
+<td><a href=#>Virtual Post-Thanksgiving Nap</a></td>
+<td><a href=#>Jesse Pinkman</a></td>
+<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>11/29/11 1:00 PM</td>
+<td><a href=#>System Maintenance</a></td>
+<td><a href=#>Nathan Drake</a></td>
+<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>12/10/11 4:30 PM</td>
+<td><a href=#>College of Engineering Tour</a></td>
+<td><a href=#>Tyler Durden</a></td>
+<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
+</tr>
+<tr>
+<td class=el_start>12/21/11 3:00 PM</td>
+<td><a href=#>Advanced Chemistry Lesson</a></td>
+<td><a href=#>Walter White</a></td>
+<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
+</tr>
+</table>
+</div>
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+
+{% endblock %}

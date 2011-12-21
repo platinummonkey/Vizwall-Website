@@ -1,0 +1,162 @@
+{% extends "base_customadmin.html" %}
+
+{% block admintitle %}
+Edit/Create Event
+{% endblock %}
+
+
+{% block content %}
+
+<!--  START CONTENT -->
+<!--  LEFT SIDE -->
+<h1>REQUEST A TIMESLOT</span></h1>
+<div class="textholder_wide">
+<h2>Event Information</h2>
+<form action="/events/request/" method="post">{% csrf_token %}
+{{ form.non_field_errors }}
+<table cellpadding=0 cellspacing=0 class=eventtable>
+<tr class=eventrow>
+<td class=eventtd width=40%> {{ form.event_title.errors }}
+<label for="id_event_title">Event Title <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_title }}
+<span class=tip>{{ form.event_title.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="id_event_date">Date & Time <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_date }}
+<span class=tip>{{ form.event_date.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_duration">Event Duration <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_duration }}
+<span class=tip>{{ form.event_duration.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_audience">Audience <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_audience }}
+<span class=tip>{{ form.event_audience.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_visitors"># of Attendees <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_visitors }}
+<span class=tip>{{ form.event_visitors.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="event_name">Components Needed <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_component_vizwall }}&nbsp;Vis Wall<br>
+{{ form.event_component_3dtv }}&nbsp;3D TV<br>
+{{ form.event_component_omni }}&nbsp;Omni<br>
+{{ form.event_component_hd2 }}&nbsp;HD2<br>
+{{ form.event_component_smart }}&nbsp;Smart Board<br>
+</label>
+<span class=tip>Select the components that will be needed.</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="event_desc">Description <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_details }}
+<span class=tip>{{ form.event_details.help_text }}</span>
+<!--<textarea name="event_desc" cols=35 rows=5></textarea>-->
+</td>
+</tr>
+</table>
+
+<h2>Contact Information</h2>
+<table cellpadding=0 cellspacing=0 class=eventtable>
+<tr class=eventrow>
+<td class=eventtd width=40%>
+<label for="event_contact_name">Contact Name <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_name }}
+<span class=tip>{{ form.event_contact_name.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_dept">Department <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_dept }}
+<span class=tip>{{ form.event_contact_dept.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_exec">Executive Office <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_exec }}
+<span class=tip>{{ form.event_contact_exec.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_phone">Phone # <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_phone }}
+<span class=tip>{{ form.event_contact_phone.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_email">Email Address <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_email }}
+<span class=tip>{{ form.event_contact_email.help_text }}</span>
+</td>
+</tr>
+
+<!-- ERROR OUTPUT --> <!-- The timeslot you selected has already been reserved. please select another date -->
+<tr class=eventrow>
+<td class=eventtd colspan=2>
+{% for field in form %}
+<span class=error>{{ field.errors }}</span>
+{% endfor %}
+</td>
+</tr>
+<!-- /ERROR OUTPUT -->
+
+<tr class=eventrow>
+<td class=eventtd>
+</td>
+<td class=eventtd>
+<input type="submit" value="Submit Request">
+</td>
+</tr>
+</table>
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

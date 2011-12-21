@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+VizLab Team
+{% endblock %}
+
+{% block content %}
+
+<!--  START CONTENT -->
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;><span>VIZLAB</span> STAFF</h1>
+<div class="right-menu">
+<ul>
+{% for s in staff %}
+<li><strong>{{ s.1.get_formal_name }}</strong><br>
+{{ s.1.get_staff_position }}<br>
+<a href="mailto:{{ s.0.email }}">{{ s.0.email }}</a></li>
+{% endfor %}
+
+</ul>
+</div>
+</div>
+
+
+<!--  LEFT SIDE -->
+<h1><span>VIZLAB</span> LEADERSHIP TEAM</span></h1>
+<div class="textholder">
+
+{% for f in faculty %}
+<div class="portrait"><img src="{{ f.1.picture }}"></div>
+<h2>{{ f.1.get_formal_name }}</h2>
+<h3>{{ f.1.get_staff_position }}</h3>
+<p>{{ f.1.staff_faculty_position }}<br>
+<a href="mailto:{{ f.0.email }}">{{ f.0.email }}</a>{% if f.1.faculty_webpage %} | <a href="{{ f.1.faculty_webpage }}">Faculty Webpage</a>{% endif %} | {{ f.1.phone }}</p>
+
+<div class="clear"></div>
+{% endfor %}
+
+</div>
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

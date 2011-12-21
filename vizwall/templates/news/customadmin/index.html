@@ -1,0 +1,56 @@
+{% extends "base_customadmin.html" %}
+{% load pagination_tags %}
+
+{% block admintitle %}
+News
+{% endblock %}
+
+{% block content %}
+
+
+<!--  START CONTENT -->
+
+<!--  LEFT SIDE -->
+<h1>MANAGE NEWS</h1>
+<div class="textholder_wide">
+{% autopaginate news 15 %}
+<div align="center">{% paginate %}</div>
+<div class=event_list>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td colspan=5 class=el_start><a href="create/"><strong>Create New Article</strong></a></td>
+</tr>
+<tr class=el_title>
+<td class=el_start><strong>Article Title</strong></td>
+<td><strong>Article Body</strong></td>
+<td><strong>Published?</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+{% for n in news %}
+<tr>
+<td class=el_start><a href="edit/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">{{ n.title }}</a></td>
+<td>{{ n.article|truncatewords:15 }}</td>
+<td>{% if n.is_published %}{{ n.pub_date|date:"n/j/y h:i A" }}{% else %}No{% endif %}</td>
+<td class=el_end><a href="/news/details/{{ n.pk }}/">View</a> | {% if n.is_published %}<a href="unpublish/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">Unpublish</a>{% else %}<a href="publish/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">Publish</a>{% endif %} | <a href="edit/{{ n.pk }}/">Edit</a> | <a href="delete/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">Delete</a></td>
+</tr>
+{% endfor %}
+{% if news|length > 14 %}
+<tr>
+<td colspan=5 class=el_start><a href=#><strong>Create New Article</strong></a></td>
+</tr>
+{% endif %}
+
+</table>
+<div align="center">{% paginate %}</div>
+</div>
+
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+
+{% endblock %}

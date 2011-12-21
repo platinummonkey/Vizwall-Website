@@ -1,0 +1,101 @@
+{% extends "base_customadmin.html" %}
+
+{% block admintitle %}
+Events
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;>Reports</h1>
+<div class="right-menu">
+<h4>Event Request Report</h4>
+<div style=padding:10px 20px;>
+<table cellpadding=10 cellspacing=0 width=100%>
+<tr>
+<td>Start Date:</td><td>End Date:</td></tr>
+<tr>
+<td>
+
+<input type="text" name="event_name" maxlength="50" size="18">
+</td>
+<td>
+
+<input type="text" name="event_name" maxlength="50" size="18">
+</td>
+</tr>
+<tr><td>
+<input type="submit" value="Submit">
+</td><td></td></tr>
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!--  LEFT SIDE -->
+<h1>ADMIN MENU</h1>
+<div class="textholder">
+{% if request.user.profile.is_scheduler or request.user.is_superuser %}
+<h4>Pending Events</h4>
+<div class=event_list>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+{% if pendingevents %}
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Contact</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+{% for e in pendingevents %}
+<tr>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="/admin/events/edit/{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
+<td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
+<td class=el_end><a href="/admin/events/requests/confirm/{{ e.pk }}/">Confirm</a> | <a href="/admin/events/requests/delete/{{ e.pk }}/">Delete</a></td>
+</tr>
+{% endfor %}
+{% else %}
+<tr><td class=el_start colspan=4>There are no pending events</td></tr>
+{% endif %}
+</table>
+</div>
+{% endif %}
+
+<h4>Active Events</h4>
+<div class=event_list>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+{% if activeevents %}
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Contact</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+{% for ae in activeevents %}
+<tr>
+<td class=el_start>{{ ae.event_date|date:"n/j/y h:i A" }} - {{ ae.get_end_date|date:"h:i A" }}</td>
+<td><a href="/admin/events/edit/{{ ae.pk }}/">{{ ae.event_title|truncatewords:5 }}</a></td>
+<td><a href="mailto:{{ ae.event_contact_email }}">{{ ae.event_contact_name }}</a></td>
+<td class=el_end><a href="/admin/events/requests/confirm/{{ ae.pk }}/">Confirm</a> | <a href="/admin/events/requests/delete/{{ ae.pk }}/">Delete</a></td>
+</tr>
+{% endfor %}
+{% else %}
+<tr><td class=el_start colspan=4>There are no active events</td></tr>
+{% endif %}
+</table>
+</div>
+
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

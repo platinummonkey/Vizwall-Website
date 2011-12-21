@@ -1,0 +1,81 @@
+{% extends "base-admin.html" %}
+
+{% block title %}
+Request a Timeslot
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+
+<!--  LEFT SIDE -->
+<h1>NEWS ARTICLE DETAIL</span></h1>
+<div class="textholder_wide">
+<table cellpadding=0 cellspacing=0 style=margin:10px;>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="article_title">Article Title <span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="article_title" maxlength="50" size="30">
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_exec">Published Status<span>*</span></label>
+</td>
+<td class=eventtd>
+<select name="published">
+<option value="unpublished">Unpublished</option>
+<option value="published">Published</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+Publish Date:
+</td>
+<td class=eventtd>
+May 02 2011, 2:30 PM
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_duration">Thumbnail Image <span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="article_thumb" maxlength="50" size="30">
+<span class=tip>Thumbnail image should be 80px x 80px</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_duration">Full Size Image</label>
+</td>
+<td class=eventtd>
+<input  type="text" name="article_image" maxlength="50" size="30">
+<span class=tip>Full size mage should be no larger than 300px x 300px</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="event_desc">Article Body <span>*</span></label>
+</td>
+<td class=eventtd>
+<textarea name="event_body" cols=60 rows=20></textarea>
+</td>
+</tr>
+<td>&nbsp;</td>
+<td class=eventtd>
+<input type="submit" value="Save Changes">
+</td>
+</tr>
+</table>
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

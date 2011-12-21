@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block content %}
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;>UPCOMING EVENTS</h1>
+<div class="right-menu" style=padding-top:0;>
+
+{% for e in events %}
+<div class ="fp-event">
+<div class="calicon"><h1>{{ e.event_date|date:"M" }}</h1><h2> {{ e.event_date|date:"j" }}</h2></div>
+<span>{{ e.event_title|truncatewords:10 }}</span>
+<p>@ {{ e.event_date|date:"g:i A" }}</p>
+</div>
+{% endfor %}
+
+<div class="fp-event" style=border-bottom:0;>
+<a href="/gallery/vizwall"><img src="/media/site_images/tourbutton.jpg"></a>
+</div>
+
+</div>
+
+</div>
+
+
+<!--  LEFT SIDE -->
+<h1>Welcome to the Advanced <span>Viz</span>ualization <span>Lab</span></h1>
+<div class="textholder">
+<p>The UTSA Advanced Visualization Laboratory, established and managed by the College of Engineering, allows researchers from all disciplines of art, science and engineering to conduct simulation and visualization research to better understand complex phenomena and translate data into images on large-scale and high resolution visualization walls or other display devices.</p>
+</div>
+
+<h1><span>VIZLAB</span> IN THE NEWS</h1>
+<div class="textholder">
+
+{% for n in news %}
+<div class="newsitem">
+<div class="newsthumb"><a href="/news/details/{{ n.pk }}/"><img src="{{ n.image_thumb }}"></a></div>
+<h1>{{ n.title }} <span><i> - {{ n.pub_date|date:"M j, Y" }}</span></i></h1>
+<p>{{ n.article|truncatewords:30 }} <br><i><a href="{% if n.outside_link %}{{ n.outside_link }}{% else %}/news/details/{{ n.pk }}/{% endif %}">Read More</a></i></p>
+</div>
+{% endfor %}
+
+</div>
+
+
+<div class="clear"></div>
+{% endblock %}

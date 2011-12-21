@@ -1,0 +1,55 @@
+{% extends "base-admin.html" %}
+
+{% block title %}
+Static Page Detail
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+
+<!--  LEFT SIDE -->
+<h1>STATIC PAGE DETAIL</span></h1>
+<div class="textholder_wide">
+<table cellpadding=0 cellspacing=0 style=margin:10px;>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="page_title">Page Title <span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="page_title" maxlength="50" size="30">
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="page_published">Published Status<span>*</span></label>
+</td>
+<td class=eventtd>
+<select name="published">
+<option value="unpublished">Unpublished</option>
+<option value="published">Published</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="page_content">Page Content <span>*</span></label>
+</td>
+<td class=eventtd>
+<textarea name="page_content" cols=60 rows=20></textarea>
+</td>
+</tr>
+<td>&nbsp;</td>
+<td class=eventtd>
+<input type="submit" value="Save Changes">
+</td>
+</tr>
+</table>
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

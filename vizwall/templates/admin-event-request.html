@@ -1,0 +1,203 @@
+{% extends "super-base.html" %}
+
+{% block title %}
+Request a Timeslot
+{% endblock %}
+
+
+{% block content %}
+
+<!--  START CONTENT -->
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;>VIZLAB GUIDELINES</h1>
+<div class="right-menu">
+<p>The calendar request form is to serve for coordination of all activities associated with the Advanced Visualization Laboratory (VizLab).  This process will allow the VizLab team to better serve the UTSA community and other collaborative efforts engaging in this resource. </p>
+
+<ol>
+<li>Requests for a demonstration or usage of the facility should be made via the calendar request form.</li>
+<li>Requests generally should be done 72 hours in advance</li>
+<li>Requested times should be Monday through Friday between the hours of 8am - 5pm.</li>
+<li>Data files to be used on the visualization wall should be in the following format to allow for software compatibility: jpg, gif, tif, png, bmp, mov, avi, mp4 and mpg.</li>
+<li>Requests for special events should be coordinated with the program specialist to allow for planning time.  </li>
+</ol>
+
+
+</div>
+
+</div>
+
+
+<!--  LEFT SIDE -->
+<h1>REQUEST A TIMESLOT</span></h1>
+<div class="textholder">
+<h2>Event Information</h2>
+<form action="/events/request/" method="post">{% csrf_token %}
+{{ form.non_field_errors }}
+<table cellpadding=0 cellspacing=0 class=eventtable>
+<tr class=eventrow>
+<td class=eventtd width=40%> {{ form.event_title.errors }}
+<label for="id_event_title">Event Title <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_title }} {{ form.event_title.help_text }}
+<span class=tip>Enter an appropriate event title.</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="id_event_date">Date & Time <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_date }} {{ form.event_date.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_duration">Event Duration <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_duration }} {{ form.event_duration.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_audience">Audience <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_audience }} {{ form.event_audience.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_visitors"># of Attendees <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_visitors }} {{ form.event_visitors.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="event_name">Components Needed <span>*</span></label>
+</td>
+<td class=eventtd>
+{% for choice_id, choice_value in form.event_components.field.choices %}
+<label for="id_event_components_{{ forloop.counter0 }}"><input type="checkbox" name="event_components" value="{{ choice_id }}">&nbsp;{{ choice_value }}</label><br>
+{% endfor %}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="event_desc">Description <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_details }} {{ form.event_details.help_text }}
+<!--<textarea name="event_desc" cols=35 rows=5></textarea>-->
+</td>
+</tr>
+</table>
+
+<h2>Contact Information</h2>
+<table cellpadding=0 cellspacing=0 class=eventtable>
+<tr class=eventrow>
+<td class=eventtd width=40%>
+<label for="event_contact_name">Contact Name <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_name }} {{ form.event_contact_name.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_dept">Department <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_dept }} {{ form.event_contact_dept.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_exec">Executive Office <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_exec }} {{ form.event_contact_exec.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_phone">Phone # <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_phone }} {{ form.event_contact_phone.help_text }}
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_email">Email Address <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.event_contact_email }} {{ form.event_contact_email.help_text }}
+</td>
+</tr>
+
+
+<!-- ADMIN ONLY -->
+</table>
+
+<h2>ADMIN/SCHEDULER ONLY</h2>
+<table cellpadding=0 cellspacing=0 class=eventtable>
+<tr class=eventrow style=background:#061629;>
+<td class=eventtd>
+<label for="event_confirm">Confirm Event?</label>
+</td>
+<td class=eventtd>
+<select name="event_confirm">
+<option value="Pending">Pending</option>
+<option value="Confirmed">Confirmed</option>
+<option value="Declined">Declined</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow style=background:#061629;>
+<td class=eventtd>
+<label for="event_proctors">Assign Proctors</label>
+</td>
+<td class=eventtd>
+<select multiple size=5 width=200>
+	<option value="p1">Proctor 1</option>
+	<option value="p2">Proctor 2</option>
+	<option value="p3">Proctor 3</option>
+	<option value="p4">Proctor 4</option>
+	<option value="p5">Proctor 5</option>
+</select>
+</td>
+</tr>
+<!-- /ADMIN ONLY -->
+
+
+
+
+<!-- ERROR OUTPUT -->
+<tr class=eventrow>
+<td class=eventtd colspan=2>
+<span class=error>The timeslot you selected has already been reserved. Please select another date.</span>
+</td>
+</tr>
+<!-- /ERROR OUTPUT -->
+
+<tr class=eventrow>
+<td class=eventtd>
+</td>
+<td class=eventtd>
+<input type="submit" value="Submit Request">
+</td>
+</tr>
+</table>
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

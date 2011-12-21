@@ -1,0 +1,209 @@
+{% extends "base-admin.html" %}
+
+{% block title %}
+Account Detail
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;>&nbsp;</h1>
+<div class="right-menu">
+<table cellpadding=0 cellspacing=0 style=margin:10px; width=100%>
+<tr class=eventrow>
+<td class=eventtd width=50%>
+<label for="is_staff">Staff</label>
+</td>
+<td class=eventtd>
+<select name="is_staff">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="is_superuser">Super User</label>
+</td>
+<td class=eventtd>
+<select name="is_superuser">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="is_leadership_team">Leadership Team</label>
+</td>
+<td class=eventtd>
+<select name="is_leadership_team">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="is_vizlab_staff">VizLab Staff</label>
+</td>
+<td class=eventtd>
+<select name="is_vizlab_staff">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="demo_presenter">Demo Presenter</label>
+</td>
+<td class=eventtd>
+<select name="demo_presenter">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="is_scheduler">Scheduler</label>
+</td>
+<td class=eventtd>
+<select name="is_scheduler">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="extra_get_event_emails">Event Emails Only</label>
+</td>
+<td class=eventtd>
+<select name="extra_get_event_emails">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="force_no_emails">Force No Emails</label>
+</td>
+<td class=eventtd>
+<select name="force_no_emails">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="staff_position">Staff Position #</label>
+</td>
+<td class=eventtd>
+<input  type="text" name="staff_position" maxlength="3" size="5">
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="rank_order">Rank Order</label>
+</td>
+<td class=eventtd>
+<input  type="text" name="rank_order" maxlength="3" size="5">
+</td>
+</tr>
+</table>
+
+
+</div>
+
+</div>
+
+<!--  LEFT SIDE -->
+<h1>EDIT USER ACCOUNT</span></h1>
+<div class="textholder">
+<h4>User Profile</h4>
+<table cellpadding=0 cellspacing=0 class=eventtable>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="username">Username <span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="username" maxlength="50" size="30">
+</td>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="Formal_Name">Formal Name <span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="formal_name" maxlength="50" size="30">
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="staff_faculty_position">Position<span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="staff_position" maxlength="50" size="30">
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd width=30%>
+<label for="email">Email Address<span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="email" maxlength="50" size="30">
+</td>
+</tr>
+<td class=eventtd width=30%>
+<label for="phone">Phone Number<span>*</span></label>
+</td>
+<td class=eventtd>
+<input  type="text" name="phone" maxlength="50" size="30">
+</td>
+</tr>
+<td class=eventtd width=30%>
+<label for="faculty_web_page">Faculty Web Page</label>
+</td>
+<td class=eventtd>
+<input  type="text" name="faculty_web_page" maxlength="50" size="30">
+</td>
+</tr>
+</tr>
+<td class=eventtd width=30%>
+<label for="picture">Picture</label>
+</td>
+<td class=eventtd>
+<input  type="text" name="picture" maxlength="50" size="30">
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+Profile Last Updated:
+</td>
+<td class=eventtd>
+May 02 2011, 2:30 PM
+</td>
+</tr>
+<tr class=eventrow>
+<td>&nbsp;</td>
+<td class=eventtd>
+<input type="submit" value="Save Changes">
+</td>
+</tr>
+</table>
+
+
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

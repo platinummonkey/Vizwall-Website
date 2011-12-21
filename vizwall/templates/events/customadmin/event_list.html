@@ -1,0 +1,112 @@
+{% extends "base_customadmin.html" %}
+
+{% block admintitle %}
+Events
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+<!--  LEFT SIDE -->
+<h1>ADMIN MENU</h1>
+<div class="textholder_wide">
+<h4>{% if mode == 'pending' %}Pending{% endif %}{% if mode == 'declined' %}Declined{% endif %}{% if mode == 'active' %}Active{% endif %} Events</h4>
+<div class=event_list>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+
+
+
+{% if mode == 'pending' %}
+{% if pendingevents %}
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Components</strong></td>
+<td><strong>Contact</strong></td>
+<td><strong>Phone</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+{% for e in pendingevents %}
+<tr>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="/admin/events/edit/{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
+<td>{% if e.event_component_vizwall %}<img src="/media/site_images/vizwall_icon.png">{% endif %}
+{% if e.event_component_3dtv %}<img src="/media/site_images/3dtv_icon.png">{% endif %}
+{% if e.event_component_omni %}<img src="/media/site_images/omni_icon.png">{% endif %}
+{% if e.event_component_hd2 %}<img src="/media/site_images/hd2_icon.png">{% endif %}
+{% if e.event_component_smart %}<img src="/media/site_images/smart_icon.png">{% endif %}</td>
+<td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
+<td>{{ e.event_contact_phone }}</td>
+<td class=el_end><a href="confirm/{{ e.pk }}/">Confirm</a> | <a href="edit/{{ e.pk }}/">Edit</a> | <a href="decline/{{ e.pk }}/">Decline</a> | <a href="delete/{{ e.pk }}/">Delete</a></td>
+</tr>
+  {% endfor %}
+{% else %}
+<td class=el_start colspan=4>There are no pending events</td></tr>
+{% endif %}
+{% endif %}
+
+
+{% if mode == 'declined' %}
+{% if declinedevents %}
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Components</strong></td>
+<td><strong>Contact</strong></td>
+<td><strong>Phone</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+{% for e in declinedevents %}
+<tr>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="/admin/events/edit/{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
+<td>{% if e.event_component_vizwall %}<img src="/media/site_images/vizwall_icon.png">{% endif %}
+{% if e.event_component_3dtv %}<img src="/media/site_images/3dtv_icon.png">{% endif %}
+{% if e.event_component_omni %}<img src="/media/site_images/omni_icon.png">{% endif %}
+{% if e.event_component_hd2 %}<img src="/media/site_images/hd2_icon.png">{% endif %}
+{% if e.event_component_smart %}<img src="/media/site_images/smart_icon.png">{% endif %}</td>
+<td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
+<td>{{ e.event_contact_phone }}</td>
+<td class=el_end><a href="confirm/{{ e.pk }}/">Confirm</a> | <a href="edit/{{ e.pk }}/">Edit</a> | <a href="undodecline/{{ e.pk }}/">Undo Decline</a> | <a href="delete/{{ e.pk }}/">Delete</a></td>
+</tr>
+  {% endfor %}
+{% else %}
+<td class=el_start colspan=4>There are no declined events</td></tr>
+{% endif %}
+{% endif %}
+
+{% if mode == 'active' %}
+{% if activeevents %}
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td><strong>Components</strong></td>
+<td><strong>Contact</strong></td>
+<td class=el_end><strong>Action</strong></td>
+</tr>
+{% for e in activeevents %}
+<tr>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="/admin/events/edit/{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
+<td>{% if e.event_component_vizwall %}<img src="/media/site_images/vizwall_icon.png">{% endif %}
+{% if e.event_component_3dtv %}<img src="/media/site_images/3dtv_icon.png">{% endif %}
+{% if e.event_component_omni %}<img src="/media/site_images/omni_icon.png">{% endif %}
+{% if e.event_component_hd2 %}<img src="/media/site_images/hd2_icon.png">{% endif %}
+{% if e.event_component_smart %}<img src="/media/site_images/smart_icon.png">{% endif %}</td>
+<td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
+<td class=el_end><a href="/admin/events/view/{{ e.pk }}/">View</a></td>
+</tr>
+{% endfor %}
+{% else %}
+<td class=el_start colspan=4>There are no active events</td></tr>
+{% endif %}
+{% endif %}
+</table>
+</div>
+
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

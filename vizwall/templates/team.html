@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block content %}
+
+<!--  START CONTENT -->
+<!--  RIGHT SIDE -->
+<div class="right-side">
+<h1 style=padding-left:20px;><span>VIZLAB</span> STAFF</h1>
+<div class="right-menu">
+<ul>
+{% for s in staff %}
+<li><strong>{{ s[1].formal_name }}</strong><br>
+{{ s[1].staff_faculty_position }}<br>
+<a href="mailto:{{ s[0].email }}">{{ s[0].email }}</a></li>
+{% endfor %}
+
+<!--<li><strong>Cody Lee</strong><br>
+Graduate Research Assistant<br>
+<a href=mailto:ggl714@utsa.edu</a>ggl714@utsa.edu</a></li>
+
+<li><strong>John Jordan</strong><br>
+Graduate Research Assistant<br>
+<a href=mailto:gmy300@utsa.edu</a>gmy300@utsa.edu</a></li>
+
+<li><strong>Ehren Biglari</strong><br>
+Graduate Research Assistant<br>
+<a href=mailto:ebiglari@gmail.com</a>ebiglari@gmail.com</a></li>
+
+<li><strong>Andrew Orton</strong><br>
+VizLab Web Specialist<br>
+<a href=mailto:andrew.orton@utsa.edu</a>andrew.orton@utsa.edu</a></li>
+-->
+</ul>
+</div>
+</div>
+
+
+<!--  LEFT SIDE -->
+<h1><span>VIZLAB</span> LEADERSHIP TEAM</span></h1>
+<div class="textholder">
+
+{% for f in team %}
+<div class="portrait"><img src="{{ f[1].picture }}"></div>
+<h2>{{ f[1].formal_name }}</h2>
+<h3>{{ f[1].staff_position }}</h3>
+<p>{{ f[1].staff_faculty_position }}<br>
+<a href="mailto:{{ f[0].email }}">{{ f[0].email }}</a> | <a href="{{ f[1].faculty_webpage }}">Faculty Webpage</a> | {{ f[1].phone }}</p>
+
+<div class="clear"></div>
+{% endfor %}
+
+<!--<div class="portrait"><img src="../media/site_images/feng.jpg"></div>
+<h2>Dr. Yusheng Feng</h2>
+<h3>VizLab Director</h3>
+<p>UTSA Associate Professor of Mechanical and Biomedical Engineering<br>
+<a href=mailto:yusheng.feng@utsa.edu>yusheng.feng@utsa.edu</a> | <a href=#>Faculty Webpage</a> | 210-458-6479</p>
+
+<div class="clear"></div>
+
+<div class="portrait"><img src="../media/site_images/millwater.jpg"></div>
+<h2>Dr. Harry Millwater</h2>
+<h3>VizLab Co-Director</h3>
+<p>UTSA Mechanical Engineering Department Chair<br>
+<a href=mailto:yusheng.feng@utsa.edu>harry.millwater@utsa.edu</a> | <a href=#>Faculty Webpage</a> | 210-458-4481</p>
+
+<div class="clear"></div>
+
+<div class="portrait"><img src="../media/site_images/nowak.jpg"></div>
+<h2>Dr. Brent Nowak</h2>
+<h3>Haptic Device Coordinator</h3>
+<p>UTSA Associate Professor of Mechanical and Biomedical Engineering<br>
+<a href=mailto:yusheng.feng@utsa.edu>brent.nowak@utsa.edu</a> | <a href=#>Faculty Webpage</a> | 210-458-6772</p>
+
+<div class="clear"></div>
+
+<div class="portrait"><img src="../media/site_images/campos.jpg"></div>
+<h2>Ben Campos</h2>
+<h3>VizLab Coordinator</h3>
+<p>SiViRT Center Specialist<br>
+<a href=mailto:yusheng.feng@utsa.edu>ben.campos@utsa.edu</a> | 210-458-6570</p>
+
+<div class="clear"></div>
+-->
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

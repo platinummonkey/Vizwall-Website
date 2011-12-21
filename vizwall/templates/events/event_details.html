@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ event.event_title|title }}
+{% endblock %}
+
+{% block content %}
+
+
+<!--  START CONTENT -->
+
+
+<!--  LEFT SIDE -->
+<h1>Event Detail</h1>
+<div class="textholder_wide">
+
+<h2>Event Information</h2>
+<p>
+<strong>Event Title:</strong> {{ event.event_title|title }}<br>
+{% if user.is_staff %}<strong>Request Date:</strong> [event_req_date]<br><!--  Admin Only -->{% endif %}
+<strong>Event Date:</strong> {{ event.event_date }}<br>
+<strong>Duration</strong> {{ event.get_duration }}<br>
+<strong>Audience:</strong> {{ event.get_audience }}<br>
+<strong>Number of Visitors:</strong> {{ event.event_visitors }}<br>
+{% if user.is_staff %}<strong>Components Needed:</strong> {% if event.event_components.vizwall %}VizWall<br>{% endif %}
+{% if event.event_components.3dtv %}3D TV<br>{% endif %}
+{% if event.event_components.omni %}Omni<br>{% endif %}
+{% if event.event_components.hd2 %}HD2<br>{% endif %}
+{% if event.event_components.smart %}Smartboard<br>{% endif %}<br><!--  Admin Only -->
+<strong>Assistance Needed?:</strong> [Yes if true]<br><!--  Admin Only -->
+<strong>Event Description:</strong><br>
+[event_details]<!--  Admin Only -->{% endif %}
+</p>
+
+{% if user.is_staff %}
+<!-- This whole block Admin Only -->
+<h2>Contact Information</h2>
+<p>
+<strong>Name:</strong> [event_contact_name]<br>
+<strong>Department:</strong> [event_contact_dept]<br>
+<strong>Executive Office:</strong> [event_contact_exec]<br>
+<strong>Phone Number</strong> [event_contact_phone]<br>
+<strong>Email Address:</strong> [event_contact_email]
+</p>
+<!-- That whole bloack Admin Only -->
+{% endif %}
+
+</div>
+
+
+
+<div class="clear"></div>
+
+{% endblock %}
