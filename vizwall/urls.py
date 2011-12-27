@@ -25,12 +25,13 @@ urlpatterns = patterns('',
     # accounts
     (r'^accounts/', include('vizwall.accounts.urls')),
     # static pages 
-    (r'^facilities/', 'vizwall.planarpages.views.facilities', {'pk_id': 1}),   
-    (r'^research/', 'vizwall.views.research'),
-    (r'^faq/', 'vizwall.views.faq'),
-    (r'^overview/', 'vizwall.views.overview'),
-    (r'^contact/', 'vizwall.views.contact'),
+    (r'^facilities/', 'vizwall.planarpages.views.displayPage', {'pk_id': 1, 'right':True}),
+    (r'^research/', 'vizwall.planarpages.views.displayPage', {'pk_id': 4}),
+    (r'^faq/', 'vizwall.planarpages.views.displayPage',{'pk_id': 2}),
+    (r'^overview/', 'vizwall.planarpages.views.displayPage', {'pk_id': 3,'right': True}),
     # end static pages
+    # contact
+    (r'^contact/', 'vizwall.views.contact'),
 
     # Events and calendar!
     (r'^calendar/', include('vizwall.events.urls_calendar')), # just calendar views
@@ -43,7 +44,7 @@ urlpatterns = patterns('',
     
     
     #TEMPORARY
-    (r'^static/', include('vizwall.planarpages.urls')),   
+    #(r'^static/', include('vizwall.planarpages.urls')),   
  
     (r'^eventrequest/', 'vizwall.views.eventrequest'),
     (r'^eventdetail/', 'vizwall.views.eventdetail'),

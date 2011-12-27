@@ -15,11 +15,11 @@ Admin Menu
 <div class="right-menu" style=padding:0;>
 	<div class="admin-side-menu">
 	<ul>
-	<li class="asm-events"><a href=#>Manage Events</a></li>
-	<li class="asm-news"><a href=#>Manage News</a></li>
-	<li class="asm-pages"><a href=#>Manage Pages</a></li>
-	<li class="asm-accounts"><a href=#>Manage Accounts</a></li>
-	<li class="asm-reports"><a href=#>Reports</a></li>
+	<li class="asm-events"><a href=/admin/events/>Manage Events</a></li>
+	<li class="asm-news"><a href=/admin/news/>Manage News</a></li>
+	{% if request.user.is_superuser %}<li class="asm-pages"><a href=/admin/static/>Manage Pages</a></li>
+	<li class="asm-accounts"><a href=/admin/accounts/>Manage Accounts</a></li>{% endif %}
+	<li class="asm-reports"><a href=/admin/events/reports/>Reports</a></li>
 	</ul>
 	</div>
 </div>
@@ -28,18 +28,12 @@ Admin Menu
 <h3 style=margin-bottom:10px;>General Site Stats</h3>
 	<div class=event_list_compact>
 		<table cellpadding=0 cellspacing=0 width=100%>
+                {% for stat in stats %}
 		<tr class=el_title>
-				<td class=el_start><strong>Some Stat</strong></td>
-				<td class=el_end>12,456</td>
+				<td class=el_start><strong>{{ stat.0 }}</strong></td>
+				<td class=el_end>{{ stat.1 }}</td>
 		</tr>
-		<tr class=el_title>
-				<td class=el_start><strong>Another Stat</strong></td>
-				<td class=el_end>12,456</td>
-		</tr>
-		<tr class=el_title>
-				<td class=el_start><strong>Some Stat</strong></td>
-				<td class=el_end>12,456</td>
-		</tr>
+		{% endfor %}
 		</table>
 	</div>
 </div>
@@ -49,90 +43,56 @@ Admin Menu
 
 <!--  LEFT SIDE -->
 <h1>ADMIN HOME</h1>
+{% if request.user.profile.is_scheduler or request.user.is_superuser %}
 <div class="textholder">
 <h3 style="padding:10px 20px;">Pending Events</h3>
 <div class=event_list_compact>
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr class=el_title>
+{% if pendingevents %}
 <td class=el_start><strong>Event Date</strong></td>
 <td><strong>Event Title</strong></td>
 <td><strong>Contact</strong></td>
 <td class=el_end><strong>Action</strong></td>
 </tr>
+{% for e in pendingevents %}
 <tr>
-<td class=el_start>11/27/11 2:00 PM</td>
-<td><a href=#>Virtual Thanksgiving Dinner</a></td>
-<td><a href=#>Ben Campos</a></td>
-<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="/admin/events/edit/{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
+<td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
+<td class=el_end><a href="confirm/{{ e.pk }}/">Confirm</a> | <a href="edit/{{ e.pk }}/">Edit</a> | <a href="decline/{{ e.pk }}/">Decline</a> | <a href="delete/{{ e.pk }}/">Delete</a></td>
 </tr>
-<tr>
-<td class=el_start>11/27/11 4:00 PM</td>
-<td><a href=#>Virtual Post-Thanksgiving Nap</a></td>
-<td><a href=#>Jesse Pinkman</a></td>
-<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
-</tr>
-<tr>
-<td class=el_start>11/29/11 1:00 PM</td>
-<td><a href=#>System Maintenance</a></td>
-<td><a href=#>Nathan Drake</a></td>
-<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
-</tr>
-<tr>
-<td class=el_start>12/10/11 4:30 PM</td>
-<td><a href=#>College of Engineering Tour</a></td>
-<td><a href=#>Tyler Durden</a></td>
-<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
-</tr>
-<tr>
-<td class=el_start>12/21/11 3:00 PM</td>
-<td><a href=#>Advanced Chemistry Lesson</a></td>
-<td><a href=#>Walter White</a></td>
-<td class=el_end><a href=#>Confirm</a> | <a href=#>Decline</a> | <a href=#>Delete</a></td>
-</tr>
+{% endfor %}
+{% else %}
+<td class=el_start colspan=4>There are no pending events</td></tr>
+{% endif %}
 </table>
 </div>
 </div>
+{% endif %}
 
 <div class="textholder">
 <h3 style="padding:10px 20px;">Upcoming Events</h3>
 <div class=event_list_compact>
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr class=el_title>
+{% if events %}
 <td class=el_start><strong>Event Date</strong></td>
 <td><strong>Event Title</strong></td>
 <td><strong>Contact</strong></td>
-<td class=el_end><strong>Assigned Proctor</strong></td>
+<td class=el_end><strong>Assigned Proctors</strong></td>
 </tr>
+{% for e in events %}
 <tr>
-<td class=el_start>11/27/11 2:00 PM</td>
-<td><a href=#>Virtual Thanksgiving Dinner</a></td>
-<td><a href=#>Ben Campos</a></td>
-<td class=el_end>Proctor 1</td>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="{% if request.user.profile.is_scheduler or request.user.is_superuser %}/admin/events/active/edit/{% else %}/events/{% endif %}{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
+<td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
+<td class=el_end>{% for proctor in e.event_assigned_proctors %}{{ proctor.full_name }},{% endfor %}</td>
 </tr>
-<tr>
-<td class=el_start>11/27/11 4:00 PM</td>
-<td><a href=#>Virtual Post-Thanksgiving Nap</a></td>
-<td><a href=#>Jesse Pinkman</a></td>
-<td class=el_end>Proctor 1, Proctor 2</td>
-</tr>
-<tr>
-<td class=el_start>11/29/11 1:00 PM</td>
-<td><a href=#>System Maintenance</a></td>
-<td><a href=#>Nathan Drake</a></td>
-<td class=el_end>Proctor 4</td>
-</tr>
-<tr>
-<td class=el_start>12/10/11 4:30 PM</td>
-<td><a href=#>College of Engineering Tour</a></td>
-<td><a href=#>Tyler Durden</a></td>
-<td class=el_end>Proctor 1, Proctor 2, Proctor 4</td>
-</tr>
-<tr>
-<td class=el_start>12/21/11 3:00 PM</td>
-<td><a href=#>Advanced Chemistry Lesson</a></td>
-<td><a href=#>Walter White</a></td>
-<td class=el_end>Proctor 3</a></td>
-</tr>
+{% endfor %}
+{% else %}
+<td class=el_start colspan=4>There are no upcoming events</td></tr>
+{% endif %}
 </table>
 </div>
 </div>
@@ -142,41 +102,23 @@ Admin Menu
 <div class=event_list_compact>
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr class=el_title>
+{% if news %}
 <td class=el_start><strong>Article Date</strong></td>
 <td><strong>Article Title</strong></td>
-<td><strong>Poster</strong></td>
-<td class=el_end><strong>Action</strong></td>
+<td><strong>Outside Link</strong></td>
+<td class=el_end><strong>Snippet</strong></td>
 </tr>
+{% for n in news %}
 <tr>
-<td class=el_start>11/27/11 2:00 PM</td>
-<td><a href=#>Virtual Thanksgiving Dinner</a></td>
-<td><a href=#>Ben Campos</a></td>
-<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
+<td class=el_start>{{ n.pub_date|date:"n/j/y h:i A" }}</td>
+<td><a href="/news/{{ n.pk }}/">{{ n.title|truncatewords:5 }}</a></td>
+<td><a href="{{ n.outside_link }}">Link</a></td>
+<td class=el_end>{{ n.article|truncatewords:5 }}</td>
 </tr>
-<tr>
-<td class=el_start>11/27/11 4:00 PM</td>
-<td><a href=#>Virtual Post-Thanksgiving Nap</a></td>
-<td><a href=#>Jesse Pinkman</a></td>
-<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
-</tr>
-<tr>
-<td class=el_start>11/29/11 1:00 PM</td>
-<td><a href=#>System Maintenance</a></td>
-<td><a href=#>Nathan Drake</a></td>
-<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
-</tr>
-<tr>
-<td class=el_start>12/10/11 4:30 PM</td>
-<td><a href=#>College of Engineering Tour</a></td>
-<td><a href=#>Tyler Durden</a></td>
-<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
-</tr>
-<tr>
-<td class=el_start>12/21/11 3:00 PM</td>
-<td><a href=#>Advanced Chemistry Lesson</a></td>
-<td><a href=#>Walter White</a></td>
-<td class=el_end><a href=#>View</a> | <a href=#>Edit</a> | <a href=#>Delete</a></td>
-</tr>
+{% endfor %}
+{% else %}
+<td class=el_start colspan=4>There is no recent news</td></tr>
+{% endif %}
 </table>
 </div>
 </div>

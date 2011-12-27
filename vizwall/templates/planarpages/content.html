@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ flatpage.get_title|striptags|title }}
+{% endblock %}
+
+{% block content %}
+<!--  LEFT SIDE -->
+<h1>{{ flatpage.get_title|title }}</h1>
+<div class="textholder_wide">
+{{ flatpage.get_content_main }}
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

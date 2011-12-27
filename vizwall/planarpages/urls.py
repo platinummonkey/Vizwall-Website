@@ -12,7 +12,10 @@ urlpatterns = patterns('vizwall.planarpages.views',
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     #(r'^$', 'index'),
-    (r'^facilities/$', 'facilities', {'pk_id': 1}),
+    (r'^facilities/$', 'displayPage', {'pk_id': 1, 'right':True}),
+    (r'^faq/$', 'displayPage', {'pk_id': 2}),
+    (r'^overview/$', 'displayPage', {'pk_id': 3, 'right':True}),
+    (r'^research/$', 'displayPage', {'pk_id': 4}),
     #(r'^details/(?P<news_id>\d+)/$', 'newsDetail'),
     
     # Display events

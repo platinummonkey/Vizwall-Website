@@ -21,10 +21,10 @@ Static Pages
 </tr>
 {% for f in flatpages %}
 <tr>
-<td class=el_start><a href="/admin/static/edit/{{ f.pk }}/">{{ f.title|title|truncatewords:5 }}</a></td>
+<td class=el_start><a href="/admin/static/edit/{{ f.pk }}/">{{ f.title|striptags|title|truncatewords:5 }}</a></td>
 <td>{{ f.last_modified|date:"n/j/y h:i A" }}</td>
-<td>{{ f.content_main|striptags|truncatewords:7 }}</td>
-<td class=el_end>{{ f.content_right|striptags|truncatewords:7 }}</td>
+<td>{{ f.content_main|striptags|truncatewords:5 }}</td>
+<td class=el_end>{{ f.content_right|striptags|truncatewords:5 }}</td>
 </tr>
 {% endfor %}
 {% else %}

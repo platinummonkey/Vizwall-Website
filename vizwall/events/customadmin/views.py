@@ -284,6 +284,28 @@ def getDownloadLink(request,type='csv'):
   dl[0] = dl[0] + 'generate/%s/?' % type
   return ''.join(dl)
 
+
+def getActiveOverallStats():
+  f = EventFilterSet({'event_is_published':True,'event_is_decilned':False})
+  numEvents = f.qs.count()
+  duration_avg = int(f.qs.aggregate(Avg('event_duration')).values()[0])
+  visitors_avg = int(f.qs.aggregate(Avg('event_visitors')).values()[0])
+  numVizwall = f.qs.filter(event_component_vizwall=True).aggregate(Count('event_component_vizwall')).values()[0]
+  num3dtv = f.qs.filter(event_component_3dtv=True).aggregate(Count('event_component_3dtv')).values()[0]
+  numOmni = f.qs.filter(event_component_omni=True).aggregate(Count('event_component_omni')).values()[0]
+  numHD2 = f.qs.filter(event_component_hd2=True).aggregate(Count('event_component_hd2')).values()[0]
+  numSmart = f.qs.filter(event_component_smart=True).aggregate(Count('event_component_smart')).values()[0]
+  return (('Total # Events', numEvents),
+          ('Duration Average', duration_avg),
+          ('Visitors Average', visitors_avg),
+          ('Vis Wall Requests', numVizwall),
+          ('3D TV Requests', num3dtv),
+          ('Omni Requests', numOmni),
+          ('HD2 Requests', numHD2),
+          ('Smart Board Requests', numSmart))
+  
+
+
 @user_passes_test(is_scheduler)
 def reportsIndex(request, download=None):
   f = EventFilterSet(request.GET or None)

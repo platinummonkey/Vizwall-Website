@@ -10,13 +10,14 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
+from django.contrib.admin.views.decorators import staff_member_required
+
 # News feed
 from vizwall.news.views import getRecentNews
-from vizwall.news.models import News
 
 # Event Feed
 from vizwall.events.views import getUpcomingEvents
-from vizwall.events.models import Event
+from vizwall.events.customadmin.views import getActiveOverallStats, getPendingEvents
 
 page_size = 20 # maximum # of events to show on page (we'll do mini synyopsis and they can click per event) 
 
@@ -24,19 +25,18 @@ def viewRedirect(request, event_id):
   ''' Redirect to /events/detail/<event_id>/ '''
   return HttpResponseRedirect('/event/detail/%s/' % event_id)
 
-def calendar(request={}):
-  ''' Main View of events, sorts data out for display'''
-  return render_to_response('calendar.html', {}, context_instance=RequestContext(request))  
-
-def events(request={}):
-  ''' Main View of events, sorts data out for display'''
-  return render_to_response('eventrequest.html', {}, context_instance=RequestContext(request))  
-
-
+@staff_member_required
 def adminhome(request):
 #  return HttpResponseRedirect('/')
   ''' Admin Home'''
-  return render_to_response('admin-menu.html', {}, context_instance=RequestContext(request)) 
+  stats = getActiveOverallStats() # grabs generic event stats
+  news = getRecentNews(10) # Get 10 latest entries
+  upcomingEvents = getUpcomingEvents(10) # Get 10 upcoming events
+  pendingEvents = getPendingEvents(request)[:10] # Get 10 upcoming events
+  return render_to_response('admin-menu.html', {'stats': stats, 
+          'news': news, 'events': upcomingEvents,
+          'pendingevents': pendingEvents},
+          context_instance=RequestContext(request))
 
 # TEMPORARY
 
@@ -100,31 +100,6 @@ def login(request={}, page=0):
 def contact(request={}):
   ''' Contact'''
   return render_to_response('contact.html', {}, context_instance=RequestContext(request))
-
-
-
-
-
-
-def faq(request={}):
-  ''' FAQ'''
-  return render_to_response('faq.html', {}, context_instance=RequestContext(request))
-  
-def overview(request={}):
-  ''' Overview'''
-  return render_to_response('docs.html', {}, context_instance=RequestContext(request))
-  
-def team(request={}):
-  ''' VizLab Team'''
-  return render_to_response('team.html', {}, context_instance=RequestContext(request))  
-  
-def facilities(request={}):
-  ''' Facilities'''
-  return render_to_response('facilities.html', {}, context_instance=RequestContext(request))
-  
-def research(request={}):
-  ''' Research'''
-  return render_to_response('research.html', {}, context_instance=RequestContext(request))
 
 def galvizwall(request={}):
   ''' VizWall Gallery'''
