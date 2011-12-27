@@ -1,0 +1,70 @@
+{% extends "base_customadmin.html" %}
+
+{% block admintitle %}
+Edit Static Page
+{% endblock %}
+
+
+{% block content %}
+
+<!--  START CONTENT -->
+<!--  LEFT SIDE -->
+<h1>Edit Static Page</span></h1>
+<div class="textholder_wide">
+<h2>Static Page Content</h2>
+<form action="/admin/static/edit/{{ page_id }}/" method="post">{% csrf_token %}
+{{ form.non_field_errors }}
+<table cellpadding=0 cellspacing=0>
+<tr class=eventrow valign=top>
+<td class=eventtd width=20%> {{ form.title.errors }}
+<label for="id_title">Page Title <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.title }}
+<span class=tip>{{ form.title.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow valign=top>
+<td class=eventtd>
+<label for="content_main">Main Content <span>*</span></label>
+</td>
+<td class=eventtd>
+{{ form.content_main }}
+<span class=tip>{{ form.content_main.help_text }}</span>
+</td>
+</tr>
+<tr class=eventrow valign=top>
+<td class=eventtd>
+<label for="content_right">Right Content</label>
+</td>
+<td class=eventtd>
+{{ form.content_right }}
+<span class=tip>{{ form.content_right.help_text }}</span>
+</td>
+</tr>
+<!-- ERROR OUTPUT -->
+<tr class=eventrow>
+<td class=eventtd colspan=2>
+{% for field in form %}
+<span class=error>{{ field.errors }}</span>
+{% endfor %}
+</td>
+</tr>
+<!-- /ERROR OUTPUT -->
+
+<tr class=eventrow>
+<td class=eventtd>
+</td>
+<td class=eventtd>
+<input type="submit" value="Submit Changes">
+</td>
+</tr>
+</table>
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

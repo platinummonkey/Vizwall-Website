@@ -14,37 +14,37 @@ urlpatterns = patterns('',
 
     
 
-    # home page
+    # home page - these have a static part, but abstracted (hence separate category)
     (r'^$', 'vizwall.views.home'),
     (r'^home/', 'vizwall.views.home'),
     (r'^index/', 'vizwall.views.home'),    
-    
+    # news 
     (r'^news/', include('vizwall.news.urls')),
-    
-    (r'^faq/', 'vizwall.views.faq'),
-    (r'^overview/', 'vizwall.views.overview'),
-    
     # vizwall team
     (r'^team/', include('vizwall.accounts.urlsteam')),
     # accounts
     (r'^accounts/', include('vizwall.accounts.urls')),
-    # this will be flat pages 
-    (r'^facilities/', 'vizwall.views.facilities'),   
+    # static pages 
+    (r'^facilities/', 'vizwall.planarpages.views.facilities', {'pk_id': 1}),   
+    (r'^research/', 'vizwall.views.research'),
+    (r'^faq/', 'vizwall.views.faq'),
+    (r'^overview/', 'vizwall.views.overview'),
+    (r'^contact/', 'vizwall.views.contact'),
+    # end static pages
 
     # Events and calendar!
     (r'^calendar/', include('vizwall.events.urls_calendar')), # just calendar views
     (r'^events/', include('vizwall.events.urls')), # events views
     
-    (r'^research/', 'vizwall.views.research'),
     
     (r'^gallery/vizwall/', 'vizwall.views.galvizwall'),
     (r'^gallery/haptic/', 'vizwall.views.galhaptic'),
     
-    (r'^contact/', 'vizwall.views.contact'),
     
     
     #TEMPORARY
-    
+    (r'^static/', include('vizwall.planarpages.urls')),   
+ 
     (r'^eventrequest/', 'vizwall.views.eventrequest'),
     (r'^eventdetail/', 'vizwall.views.eventdetail'),
     (r'^adminmenu/', 'vizwall.views.adminmenu'),

@@ -60,9 +60,9 @@ urlpatterns = patterns('vizwall.events.customadmin.views',
 
     ## Reports ##
     # Report Home Page # contains form for generation
-    #(r'^reports/$', 'reportsIndex'),
-    # Generate Report # requires POST
-    #(r'^reports/generate/$', 'reportsIndex'),
+    (r'^reports/$', 'reportsIndex'),
+    # Generate Report 
+    (r'^reports/generate/csv/$', 'reportsIndex', {'download': 'csv'}),
     # 
 
  

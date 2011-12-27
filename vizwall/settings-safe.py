@@ -114,6 +114,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 
+# django-filter is used and source has been modified!
+# django-pagination is also used
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,9 +127,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # pagination
     'pagination',
+    # reporting
+    #'reportengine',
     # custom feature
     'vizwall.accounts', # user profiles
     'vizwall.news',
     'vizwall.events',
+    'vizwall.planarpages',
+    #'vizwall.gallery', #TODO
     'vizwall.templatetags',
 )

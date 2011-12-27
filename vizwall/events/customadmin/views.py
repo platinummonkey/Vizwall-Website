@@ -18,6 +18,11 @@ from vizwall.events.models import Event
 from vizwall.events.viewscalendar import formatEvents
 from vizwall.events.forms import *
 
+# Reports
+from vizwall.events.customadmin.reports import EventFilterSet
+from django.db.models import Avg, Sum, Count, Max, Min #, StdDev, Varience
+import csv
+
 # debug
 DEBUGSENDMAIL = False
 
@@ -272,3 +277,61 @@ def requestConfirm(request): #TODO
 
 def requestStatus(request, event_id): # TODO
   return render_to_response('events/event_status.html', {})
+
+##### REPORTS #####
+def getDownloadLink(request,type='csv'):
+  dl = request.get_full_path().split('?')
+  dl[0] = dl[0] + 'generate/%s/?' % type
+  return ''.join(dl)
+
+@user_passes_test(is_scheduler)
+def reportsIndex(request, download=None):
+  f = EventFilterSet(request.GET or None)
+  numEvents = f.qs.count()
+  duration_avg = int(f.qs.aggregate(Avg('event_duration')).values()[0])
+  visitors_avg = int(f.qs.aggregate(Avg('event_visitors')).values()[0])
+  numVizwall = f.qs.filter(event_component_vizwall=True).aggregate(Count('event_component_vizwall')).values()[0]
+  num3dtv = f.qs.filter(event_component_3dtv=True).aggregate(Count('event_component_3dtv')).values()[0]
+  numOmni = f.qs.filter(event_component_omni=True).aggregate(Count('event_component_omni')).values()[0]
+  numHD2 = f.qs.filter(event_component_hd2=True).aggregate(Count('event_component_hd2')).values()[0]
+  numSmart = f.qs.filter(event_component_smart=True).aggregate(Count('event_component_smart')).values()[0]
+  csvDownloadLink = getDownloadLink(request,'csv')
+  
+  if download == 'csv':
+    # Generate CSV for download
+    response = HttpResponse(mimetype='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=report_generation_%s.csv' % datetime.datetime.now().strftime('%m%d%Y_%H%M')
+    writer = csv.writer(response)
+    writer.writerow(['# Events','Duration Average','Visitors Average',
+                     '# Vis Wall Requests', '# 3D TV Requests', '# Omni Requests',
+                     '# HD2 Requests', '# Smart Board Requests', 'CSV Link'])
+    writer.writerow([numEvents,duration_avg,visitors_avg,numVizwall,num3dtv,numOmni,
+                     numHD2,numSmart,'http://vizwall.utsa.edu'+csvDownloadLink])
+    writer.writerow([]) # spacer
+    writer.writerow(['Event Title','Published','Declined','Event Request Date',
+                     'Published Date','Last Modified','Event Date','Duration',
+                     'Visitors','Audience','Vis Wall','3D TV','Omni','HD2',
+                     'Smart Board','Assistance','Contact Name','Contact Dept',
+                     'Contact Exec','Contact Phone','Contact Email','Proctors',
+                     'Event Details'])
+    for e in f.qs:
+      proctors = []
+      for u in e.event_assigned_proctors.all():
+        proctors.append(str(u.get_full_name()))
+      if proctors:
+        proctors = ';'.join(proctors)
+      else:
+        proctors = ''
+      writer.writerow([str(e.event_title),str(e.event_pub_date),str(e.event_is_declined),
+                       str(e.event_req_date),str(e.event_pub_date),str(e.event_last_modified),
+                       str(e.event_date),str(e.event_duration),str(e.event_visitors),
+                       str(e.event_audience),str(e.event_component_vizwall),
+                       str(e.event_component_3dtv),str(e.event_component_omni),
+                       str(e.event_component_hd2),str(e.event_component_smart),
+                       str(e.event_assistance),str(e.event_contact_name),
+                       str(e.event_contact_dept),str(e.event_contact_exec),
+                       str(e.event_contact_phone),str(e.event_contact_email),
+                       proctors,str(e.event_details)])
+    return response
+  # Else render display results page
+  return render_to_response('events/customadmin/report_index.html', {'filter': f, 'count': numEvents, 'duration_avg': duration_avg, 'visitors_avg': visitors_avg, 'count_vizwall': numVizwall, 'count_3dtv': num3dtv, 'count_omni': numOmni, 'count_hd2': numHD2, 'count_smart': numSmart, 'csvDownloadLink': csvDownloadLink}, context_instance=RequestContext(request))

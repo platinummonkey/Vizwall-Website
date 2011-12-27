@@ -101,12 +101,18 @@ class Event(models.Model):
     return self.event_date+datetime.timedelta(minutes=int(dur))
 
   def get_audience(self):
-    d = self.tuple2dict(AUDIENCE_CHOICES)
-    return d[self.event_audience]
+    try:
+      d = self.tuple2dict(AUDIENCE_CHOICES)
+      return d[self.event_audience]
+    except:
+      return None
 
   def get_contact_exec(self):
-    d = self.tuple2dict(CONTACT_EXEC_CHOICES)
-    return d[self.event_contact_exec]
+    try:
+      d = self.tuple2dict(CONTACT_EXEC_CHOICES)
+      return d[self.event_contact_exec]
+    except:
+      return None
 
   def tuple2dict(self, choices):
     d = {}

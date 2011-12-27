@@ -1,0 +1,44 @@
+{% extends "base_customadmin.html" %}
+
+{% block admintitle %}
+Static Pages
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+<!--  LEFT SIDE -->
+<h1>ADMIN MENU</h1>
+<div class="textholder_wide">
+<h4>Static Pages</h4>
+<div class=event_list>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+{% if flatpages %}
+<td class=el_start><strong>Title</strong></td>
+<td><strong>Last Modified</strong></td>
+<td><strong>Main Content Snippet</strong></td>
+<td class=el_end><strong>Right Content Snippet</strong></td>
+</tr>
+{% for f in flatpages %}
+<tr>
+<td class=el_start><a href="/admin/static/edit/{{ f.pk }}/">{{ f.title|title|truncatewords:5 }}</a></td>
+<td>{{ f.last_modified|date:"n/j/y h:i A" }}</td>
+<td>{{ f.content_main|striptags|truncatewords:7 }}</td>
+<td class=el_end>{{ f.content_right|striptags|truncatewords:7 }}</td>
+</tr>
+{% endfor %}
+{% else %}
+<tr class=el_title><td class=el_start colspan=4>There are no static pages...</td></tr>
+{% endif %}
+</table>
+</div>
+
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

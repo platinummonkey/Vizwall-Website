@@ -1,0 +1,160 @@
+{% extends "base_customadmin.html" %}
+{% load pagination_tags %}
+
+
+{% block admintitle %}
+Events Report
+{% endblock %}
+
+
+{% block content %}
+
+<!--  START CONTENT -->
+<!--  LEFT SIDE -->
+<h1>Event Report</span></h1>
+<div class="textholder_wide">
+<h2>Filter <a id="filterImageLink" href="javascript:toggleFilter('filterContentDiv', 'filterImageLink');"><img align=right src="/media/site_images/down_arrow.gif"></a></h2>
+<div id="filterContentDiv" style="display: none;">
+<form action="/admin/events/reports/" method="get">{% csrf_token %}
+{{ form.non_field_errors }}
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr>
+<td class=eventtd width=20%> {{ filter.form.event_title.errors }}
+<label for="id_event_title">Event Title</label>
+</td>
+<td class=eventtd>
+{{ filter.form.event_title }}
+<span class=tip>Keyword Search</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="id_event_date">Date & Time</label>
+</td>
+<td class=eventtd>
+{{ filter.form.event_date }}
+<span class=tip>Select Date Range</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_duration">Event Duration</label>
+</td>
+<td class=eventtd>
+{{ filter.form.event_duration }}
+<span class=tip>Length of the event</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_visitors"># of Attendees</label>
+</td>
+<td class=eventtd>
+{{ filter.form.event_visitors }}
+<span class=tip>Select Number of Visitors</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd valign=top>
+<label for="event_name">Components Needed</label>
+</td>
+<td class=eventtd>
+Vis Wall: {{ filter.form.event_component_vizwall }}<br>
+3D TV: {{ filter.form.event_component_3dtv }}<br>
+Omni: {{ filter.form.event_component_omni }}<br>
+HD2: {{ filter.form.event_component_hd2 }}<br>
+Smart Board: {{ filter.form.event_component_smart }}<br>
+<span class=tip>Select the components that will be needed.</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_dept">Department</label>
+</td>
+<td class=eventtd>
+{{ filter.form.event_contact_dept }}
+<span class=tip>Keyword Search</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+<label for="event_contact_exec">Executive Office</label>
+</td>
+<td class=eventtd>
+{{ filter.form.event_contact_exec }}
+<span class=tip>Select an Office</span>
+</td>
+</tr>
+<tr class=eventrow>
+<td class=eventtd>
+</td>
+<td class=eventtd>
+<input type="submit" value="Filter Results">
+</td>
+</tr>
+</table>
+</form>
+</div>
+</div>
+
+<div class="textholder_wide">
+<h2>Results</h2><br />
+{% autopaginate filter.qs 40 as filter_list %}
+<h4 align=right><a href="{{ csvDownloadLink }}">Download CSV</a></h4>
+<center>{% paginate %}</center>
+<div class="event_list">
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+<td class=el_start><strong># of Events</strong></td>
+<td><strong>Duration Average</strong></td>
+<td><strong>Visitors Average</strong></td>
+<td><strong># VizWall Requests</strong></td>
+<td><strong># 3D TV Requests</strong></td>
+<td><strong># Omni Requests</strong></td>
+<td><strong># HD2 Requests</strong></td>
+<td class=el_end><strong># Smart Board Requests</td>
+</tr>
+<tr>
+<td class=el_start>{{ count }}</td>
+<td>{{ duration_avg }}</td>
+<td>{{ visitors_avg }}</td>
+<td>{{ count_vizwall }}</td>
+<td>{{ count_3dtv }}</td>
+<td>{{ count_omni }}</td>
+<td>{{ count_hd2 }}</td>
+<td class=el_end>{{ count_smart }}</td>
+</tr>
+</table><br /><br />
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+<td class=el_start><strong>Title</strong></td>
+<td><strong>Date</strong></td>
+<td><strong>Duration</strong></td>
+<td><strong># Attendees</strong></td>
+<td><strong>Department</strong></td>
+<td class=el_end><strong>Components</strong></td>
+</tr>
+{% for e in filter_list %}
+<tr>
+<td class=el_start>{{ e.event_title }}</td>
+<td>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td>{{ e.event_duration }}</td>
+<td>{{ e.event_visitors }}</td>
+<td>{{ e.event_contact_dept|title }}</td>
+<td class=el_end>{% if e.event_component_vizwall %}<img src="/media/site_images/vizwall_icon.png">{% endif %}
+{% if e.event_component_3dtv %}<img src="/media/site_images/3dtv_icon.png">{% endif %}
+{% if e.event_component_omni %}<img src="/media/site_images/omni_icon.png">{% endif %}
+{% if e.event_component_hd2 %}<img src="/media/site_images/hd2_icon.png">{% endif %}
+{% if e.event_component_smart %}<img src="/media/site_images/smart_icon.png">{% endif %}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+<center>{% paginate %}</center>
+<br /><h4 align=right><a href="{{ csvDownloadLink }}">Download CSV</a></h4>
+</div>
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

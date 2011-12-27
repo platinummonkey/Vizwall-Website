@@ -58,8 +58,8 @@
 			}
 		);
     </script>
-        <script src="/media/js/jquery-1.4.1.min.js" type="text/javascript"></script>
-	    <script src="/media/js/jquery.easing.1.2.js" type="text/javascript"></script>
+        <!--<script src="/media/js/jquery-1.4.1.min.js" type="text/javascript"></script>-->
+	    <!--<script src="/media/js/jquery.easing.1.2.js" type="text/javascript"></script>-->
     <script src="/media/js/jquery.slideviewer.1.2.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(window).bind("load", function() {
@@ -71,19 +71,17 @@
 <link rel="stylesheet" type="text/css" href="/media/css/datetimepicker.css">
 <script type="text/javascript" src="/media/js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="/media/js/timepicker.js"></script>
+<script type="text/javascript" src="/media/js/toggle.js"</script>
 <script type="text/javascript">
-
-			$(function(){
-
-
-				$('#id_event_date').datetimepicker({
-					ampm: true,
-					hourMin: 8,
-					hourMax: 16,
-					stepHour: 1,
-					stepMinute: 15
+  $(function(){
+    $('#id_event_date').datetimepicker({
+		ampm: true,
+		hourMin: 8,
+		hourMax: 16,
+		stepHour: 1,
+		stepMinute: 15
 });
-			});
+});
 
 		</script>
 <style type=text/css>

@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     # Events and calendar!
     (r'^events/', include('vizwall.events.customadmin.urls')), # events views
     
+    # Flat Pages
+    (r'^static/', include('vizwall.planarpages.customadmin.urls')),
 
     # the django admin interface
     (r'^django/', admin.site.urls), # django admin
