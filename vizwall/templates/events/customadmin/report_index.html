@@ -16,7 +16,7 @@ Events Report
 <h2>Filter <a id="filterImageLink" href="javascript:toggleFilter('filterContentDiv', 'filterImageLink');"><img align=right src="/media/site_images/down_arrow.gif"></a></h2>
 <div id="filterContentDiv" style="display: none;">
 <form action="/admin/events/reports/" method="get">{% csrf_token %}
-{{ form.non_field_errors }}
+{{ filter.form.non_field_errors }}
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr>
 <td class=eventtd width=20%> {{ filter.form.event_title.errors }}
@@ -83,6 +83,15 @@ Smart Board: {{ filter.form.event_component_smart }}<br>
 <td class=eventtd>
 {{ filter.form.event_contact_exec }}
 <span class=tip>Select an Office</span>
+</td>
+</tr>
+<tr>
+<td class=eventtd> {{ filter.form.o.errors }}
+<label for "id_o">Order By</label>
+</td>
+<td class=eventtd>
+{{ filter.form.o }}
+<span class=tip>Change ordering</span>
 </td>
 </tr>
 <tr class=eventrow>

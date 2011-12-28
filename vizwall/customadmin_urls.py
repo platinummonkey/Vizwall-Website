@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     (r'^news/', include('vizwall.news.customadmin.urls')),
     
     # vizwall team
-    #(r'^accounts/', include('vizwall.accounts.customadmin.urls')),
+    (r'^accounts/', include('vizwall.accounts.customadmin.urls')),
     
     # Events and calendar!
     (r'^events/', include('vizwall.events.customadmin.urls')), # events views
