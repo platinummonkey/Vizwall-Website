@@ -5,7 +5,7 @@
 4. create the database and update the django settings.py
 5. install django-filter and django-pagination:
   easy_install django-pagination
-  easy_install django-filter
+  easy_install django-filter - you will need to apply the patches in django-filter_edits.txt!!!!
 6. cd in to the django directory:
   python manage.py syncdb
 7. Create a root web user
