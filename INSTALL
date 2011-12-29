@@ -3,7 +3,10 @@
     git clone git://github.com/platinummonkey/Vizwall-Website.git
 3. Update the apache site config.
 4. create the database and update the django settings.py
-5. cd in to the django directory:
+5. install django-filter and django-pagination:
+  easy_install django-pagination
+  easy_install django-filter
+6. cd in to the django directory:
   python manage.py syncdb
-6. Create a root web user
-7. Enable the site - requires mod_python installed
+7. Create a root web user
+8. Enable the site - requires mod_python installed
