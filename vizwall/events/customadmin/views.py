@@ -167,7 +167,7 @@ def newEvent(request, redirectURL='/admin/events/requests/'):
 
 
 @user_passes_test(is_scheduler)
-def editEvent(request, event_id, redirectURL='/admin/events/requests/'):
+def editEvent(request, event_id, redirectURL='/admin/events//'):
   event = get_object_or_404(Event, pk=event_id)
   if request.method == 'POST': # form submitted
     form = EventFormAdmin(request.POST, instance=event) # repopulate form with edited data
@@ -270,10 +270,6 @@ def getUpcomingEvents(maxEvents):
                  event_date__gte=datetime.date(now.year, now.month, now.day),
                  event_date__lte=datetime.date(nYear, nMonth, now.day)).order_by('event_date')[:maxEvents]
   return events
-
-
-def requestConfirm(request): #TODO
-  return render_to_response('events/event_confirm_submission.html', {})
 
 def requestStatus(request, event_id): # TODO
   return render_to_response('events/event_status.html', {})

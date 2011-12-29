@@ -81,7 +81,7 @@ Events
 <td class=el_start>{{ ae.event_date|date:"n/j/y h:i A" }} - {{ ae.get_end_date|date:"h:i A" }}</td>
 <td><a href="/admin/events/edit/{{ ae.pk }}/">{{ ae.event_title|truncatewords:5 }}</a></td>
 <td><a href="mailto:{{ ae.event_contact_email }}">{{ ae.event_contact_name }}</a></td>
-<td class=el_end><a href="/admin/events/requests/confirm/{{ ae.pk }}/">Confirm</a> | <a href="/admin/events/requests/delete/{{ ae.pk }}/">Delete</a></td>
+<td class=el_end><a href="/admin/events/active/deactivate/{{ ae.pk }}/">Deactivate</a> | <a href="/admin/events/requests/delete/{{ ae.pk }}/">Delete</a></td>
 </tr>
 {% endfor %}
 {% else %}

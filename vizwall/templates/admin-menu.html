@@ -87,7 +87,7 @@ Admin Menu
 <td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
 <td><a href="{% if request.user.profile.is_scheduler or request.user.is_superuser %}/admin/events/active/edit/{% else %}/events/{% endif %}{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
 <td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
-<td class=el_end>{% for proctor in e.event_assigned_proctors %}{{ proctor.full_name }},{% endfor %}</td>
+<td class=el_end>TODO</td>
 </tr>
 {% endfor %}
 {% else %}

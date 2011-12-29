@@ -6,6 +6,13 @@ from django.http import HttpResponseRedirect
 urlpatterns = patterns('vizwall.events.customadmin.views',
     (r'^$', 'index'),
 
+    #### Generic View ###
+    (r'^edit/(?P<event_id>\d+)/$', 'editEvent', {'redirectURL':'/admin/events/'}),
+    (r'^delete/(?P<event_id>\d+)/$', 'deleteEvent', {'redirectURL':'/admin/events/'}),
+    (r'^publish/(?P<event_id>\d+)/$', 'requestConfirm', {'redirectURL':'/admin/events/'}),
+    (r'^deactivate/(?P<event_id>\d+)/$', 'deactivateEvent', {'redirectURL':'/admin/events/'}),
+    #### end Generic Views ###
+
 
     ### Approved Events ###
     # List of Events
@@ -31,6 +38,7 @@ urlpatterns = patterns('vizwall.events.customadmin.views',
     (r'^requests/edit/(?P<event_id>\d+)/$', 'editEvent', {'redirectURL':'/admin/events/requests/'}),
     # Publish Event
     (r'^requests/publish/(?P<event_id>\d+)/$', 'requestConfirm', {'redirectURL':'/admin/events/requests/'}),
+    (r'^requests/confirm/(?P<event_id>\d+)/$', 'requestConfirm', {'redirectURL':'/admin/events/requests/'}),
     # Delete Event
     (r'^requests/delete/(?P<event_id>\d+)/$', 'deleteEvent', {'redirectURL':'/admin/events/requests/'}),
     # Decline Event
