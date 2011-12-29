@@ -12,9 +12,6 @@ urlpatterns = patterns('vizwall.accounts.customadmin.views',
     # delete user
     (r'delete/(?P<user_id>\d+)/$', 'deleteUser'),
     # deactivate user
-    (r'deactivate/(?P<user_id>\d+)/$', 'userActivation', {'activate': False}),
-    (r'reactivate/(?P<user_id>\d+)/$', 'deleteUser', {'activate': True}),
-    # search users
-    (r'search/', 'searchUsers'),
-
+    (r'deactivate/(?P<user_id>\d+)/$', 'deactivateUser'),
+    (r'reactivate/(?P<user_id>\d+)/$', 'activateUser'),
 )

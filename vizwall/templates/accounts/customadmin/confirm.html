@@ -1,0 +1,25 @@
+{% extends "base_customadmin.html" %}
+
+{% block admintitle %}
+Confirm {% if mode == 'delete' %}Deletion{% endif %}{% if mode == 'deactivate'%}Deactivation{% endif %} of User!
+{% endblock %}
+
+{% block content %}
+<!--  START CONTENT -->
+
+<!--  LEFT SIDE -->
+<h1>USER DETAIL</span></h1>
+<div class="textholder_wide">
+<form action="/admin/accounts/{% if mode == 'delete' %}delete{% endif %}{% if mode == 'deactivate'%}deactivate{% endif %}/{{ user_id }}/" method="post">{% csrf_token %}
+<p align=center>Are you sure you want to {% if mode == 'delete' %}Delete{% endif %}{% if mode == 'deactivate'%}Deactivate{% endif %} <span>{{ user.profile.get_formal_name }}</span>?<br>
+<input type="submit" name="confirm" value="Yes">
+<input type="submit" name="confirm" value="No"></p>
+
+</div>
+
+
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+{% endblock %}

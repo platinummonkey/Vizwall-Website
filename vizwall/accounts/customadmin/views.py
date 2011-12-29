@@ -32,11 +32,17 @@ def index(request):
             'inact_user_count': numInactive},
           context_instance=RequestContext(request))
 
+def emailPassword(email, password):
+  subject = 'Password Reset'
+  message = 'Your password has been reset: %s\n\nPlease login now and change this: http://vislab.utsa.edu/login/' % password
+  send_mail(subject, message, 'no-reply@vislab.utsa.edu', email)
+
 def createUser(request, redirectURL='/admin/accounts/'):
   if request.method == 'POST':
     form = UserFormAdmin(request.POST)
     if form.is_valid():
-      form.save()
+      (user, password) = form.save()
+      emailPassword(user.email, password)
       return HttpResponseRedirect(redirectURL)
   else:
     form = UserFormAdmin()
@@ -49,12 +55,17 @@ def editUser(request, user_id, redirectURL='/admin/accounts/'):
     form = UserFormAdmin(request.POST)
     if form.is_valid():
       form.update_user(user_id)
+      if form.cleaned_data['reset_password'] == True and form.cleaned_data['is_active'] == True:
+        password = form.do_reset_password()
+        email = form.cleaned_data['email']
+        emailPassword(email, password)
       return HttpResponseRedirect(redirectURL)
   else:
     data = {'username': user.username,
             'email': user.email,
             'firstname': user.first_name,
             'lastname': user.last_name,
+            'is_active': user.is_active,
             'is_staff': user.is_staff,
             'is_superuser': user.is_superuser,
             'is_leadership_team': userprofile.is_leadership_team,
@@ -67,6 +78,43 @@ def editUser(request, user_id, redirectURL='/admin/accounts/'):
             'faculty_webpage': userprofile.faculty_webpage,
             'staff_position_number': userprofile.staff_position,
             'faculty_position': userprofile.staff_faculty_position,
-            'rank_order': userprofile.rank_order}
+            'rank_order': userprofile.rank_order,
+            'reset_password': False}
     form = UserFormAdmin(data)
     return render_to_response('accounts/customadmin/edit.html', {'form': form, 'user_id': user_id, 'redirectURL': redirectURL}, context_instance=RequestContext(request))
+
+def activateUser(request, user_id, redirectURL='/admin/accounts/'):
+  user = get_object_or_404(User, pk=user_id)
+  user.is_active = True
+  password = User.objects.make_random_password(length=15)
+  user.set_password(password)
+  userprofile = user.get_profile()
+  userprofile.last_update_profile = datetime.datetime.now()
+  userprofile.save()
+  user.save()
+  emailPassword(user.email, password)
+  return HttpResponseRedirect(redirectURL)
+
+def deactivateUser(request, user_id, redirectURL='/admin/accounts/'):
+  user = get_object_or_404(User, pk=user_id)
+  if request.method == 'POST':
+    if request.POST['confirm'] == u'Yes':
+      user.is_active = False
+      user.set_unusable_password()
+      userprofile = user.get_profile()
+      userprofile.last_update_profile = datetime.datetime.now()
+      userprofile.save()
+      user.save()
+    return HttpResponseRedirect(redirectURL)
+  return render_to_response('accounts/customadmin/confirm.html', {'mode': 'deactivate', 'user_id': user_id, 'user': user}, context_instance=RequestContext(request))
+
+def deleteUser(request, user_id, redirectURL='/admin/accounts/'):
+  user = get_object_or_404(User, pk=user_id)
+  if request.method == 'POST':
+    if request.POST['confirm'] == u'Yes':
+      userprofile = user.get_profile()
+      userprofile.delete()
+      user.delete()
+    return HttpResponseRedirect(redirectURL)
+  return render_to_response('accounts/customadmin/confirm.html', {'mode': 'delete', 'user_id': user_id, 'user': user}, context_instance=RequestContext(request))
+

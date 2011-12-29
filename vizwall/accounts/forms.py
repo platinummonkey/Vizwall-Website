@@ -25,6 +25,8 @@ class UserFormAdmin(Form):
   is_force_no_emails = BooleanField(required=True, initial=False)
   staff_position_number = IntegerField(required=True, initial=10)
   rank_order = IntegerField(required=True, initial=10)
+  reset_password = BooleanField(required=False, initial=False)
+  is_active = BooleanField(required=False, initial=True)
   
   def clean_username(self):
     try:
@@ -41,7 +43,8 @@ class UserFormAdmin(Form):
       return self.email
 
   def save(self):
-    newuser = User.objects.create_user(self.username, self.email, User.objects.make_random_password(length=15))
+    password = User.objects.make_random_password(length=15)
+    newuser = User.objects.create_user(self.username, self.email, password)
     newuser.first_name = self.firstname
     newuser.last_name = self.lastname
     if self.is_staff: newuser.is_staff = True
@@ -60,7 +63,14 @@ class UserFormAdmin(Form):
     newuserprofile.staff_faculty_position = self.faculty_position 
     newuserprofile.rank_order = self.rank_order
     newuserprofile.save()
+    if self.is_active == False: self.deactivate(newuser)
+    return (user, password)
 
+  def deactivate(self, user):
+    user.is_active = False
+    user.set_unusable_password()
+    user.save()
+    
   def update_user(self, user_id):
     user = User.objects.get(pk=user_id)
     userprofile = user.get_profile()
@@ -80,10 +90,11 @@ class UserFormAdmin(Form):
     newuserprofile.staff_faculty_position = self.faculty_position
     newuserprofile.rank_order = self.rank_order
     newuserprofile.save()
+    if self.is_active == False: self.deactivate(user)
 
-  def reset_password(self, user_id, password=None):
+  def do_reset_password(self, user_id):
+    password = User.objects.make_random_password(length=15)
     user = User.objects.get(user_id)
-    if password:
-      user.set_password(password)
-    else:
-      user.set_password(User.objects.make_random_password(length=15))
+    user.set_password(password)
+    user.save()
+    return password
