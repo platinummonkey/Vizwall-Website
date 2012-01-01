@@ -32,7 +32,8 @@ def adminhome(request):
   stats = getActiveOverallStats() # grabs generic event stats
   news = getRecentNews(10) # Get 10 latest entries
   upcomingEvents = getUpcomingEvents(10) # Get 10 upcoming events
-  pendingEvents = getPendingEvents(request)[:10] # Get 10 upcoming events
+  pendingEvents = getPendingEvents(request)
+  if pendingEvents: pendingEvents = pendingEvents[:10] # Get 10 upcoming events
   return render_to_response('admin-menu.html', {'stats': stats, 
           'news': news, 'events': upcomingEvents,
           'pendingevents': pendingEvents},
