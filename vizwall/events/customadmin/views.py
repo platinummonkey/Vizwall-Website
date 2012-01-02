@@ -284,13 +284,22 @@ def getDownloadLink(request,type='csv'):
 def getActiveOverallStats():
   f = EventFilterSet({'event_is_published':True,'event_is_decilned':False})
   numEvents = f.qs.count()
-  duration_avg = int(f.qs.aggregate(Avg('event_duration')).values()[0])
-  visitors_avg = int(f.qs.aggregate(Avg('event_visitors')).values()[0])
-  numVizwall = f.qs.filter(event_component_vizwall=True).aggregate(Count('event_component_vizwall')).values()[0]
-  num3dtv = f.qs.filter(event_component_3dtv=True).aggregate(Count('event_component_3dtv')).values()[0]
-  numOmni = f.qs.filter(event_component_omni=True).aggregate(Count('event_component_omni')).values()[0]
-  numHD2 = f.qs.filter(event_component_hd2=True).aggregate(Count('event_component_hd2')).values()[0]
-  numSmart = f.qs.filter(event_component_smart=True).aggregate(Count('event_component_smart')).values()[0]
+  if numEvents > 0:
+    duration_avg = int(f.qs.aggregate(Avg('event_duration')).values()[0])
+    visitors_avg = int(f.qs.aggregate(Avg('event_visitors')).values()[0])
+    numVizwall = f.qs.filter(event_component_vizwall=True).aggregate(Count('event_component_vizwall')).values()[0]
+    num3dtv = f.qs.filter(event_component_3dtv=True).aggregate(Count('event_component_3dtv')).values()[0]
+    numOmni = f.qs.filter(event_component_omni=True).aggregate(Count('event_component_omni')).values()[0]
+    numHD2 = f.qs.filter(event_component_hd2=True).aggregate(Count('event_component_hd2')).values()[0]
+    numSmart = f.qs.filter(event_component_smart=True).aggregate(Count('event_component_smart')).values()[0]
+  else:
+    duration_avg = 0
+    visitors_avg = 0
+    numVizwall = 0
+    num3dtv = 0
+    numOmni = 0
+    numHD2 = 0
+    numSmart =0
   return (('Total # Events', numEvents),
           ('Duration Average', duration_avg),
           ('Visitors Average', visitors_avg),
