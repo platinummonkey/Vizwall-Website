@@ -9,15 +9,14 @@
 
 
 <!--  LEFT SIDE -->
-<h1><span>VizLab</span> in the news</h1>
+<h1><span style=float:right>{% if request.user.profile.is_scheduler or request.user.is_superuser %}<p align=right><span><a href="/admin/news/edit/{{ news.pk }}/">Edit</a> | {% if news.is_published %}<a href="/admin/news/unpublish/{{ news.pk }}/">Unpublish</a>{% else %}<a href="/admin/news/publish/{{ news.pk }}/">Publish</a>{% endif %} | <a href="/admin/news/delete/{{ news.pk }}/">Delete</a></span></p>{% endif %}</span><span>VizLab</span> in the news</h1>
 <div class="textholder_wide">
-<h2>{{ news.title }}</h2><br>
-{% if request.user.profile.is_scheduler or request.user.is_superuser %}<p align=right><span><a href="/admin/news/edit/{{ news.pk }}/">Edit</a> | {% if news.is_published %}<a href="/admin/news/unpublish/{{ news.pk }}/">Unpublish</a>{% else %}<a href="/admin/news/publish/{{ news.pk }}/">Publish</a>{% endif %} | <a href="/admin/news/delete/{{ news.pk }}/">Delete</a></span></p>{% endif %}
+<h2>{{ news.title }}</h2>
 <p>{% if news.image %}<img src="{{ news.image }}"><br>{% endif %}
 {{ news.article|safe }}
-{% if news.outside_link %}<br><a href="{{ news.outside_link }}">Read More</a>{% endif %}
+{% if news.outside_link %}<br>Read More: <a href="{{ news.outside_link }}">Publication Source</a>{% endif %}
 <br><br>
-To learn more about the Advanced Visualization Laboratory or to schedule a tour, visit <a href="/">http://viswall.utsa.edu</a>.
+To learn more about the Advanced Visualization Laboratory or to schedule a tour, visit <a href="/">http://vizwall.utsa.edu</a>.
 <br><br>
 {% if request.user.profile.is_scheduler or request.user.is_superuser %}
 {% if not news.is_published %}Not Published{% else %}
