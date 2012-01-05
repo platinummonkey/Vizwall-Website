@@ -76,7 +76,7 @@ class Event(models.Model):
   event_assistance = models.BooleanField(default=True, blank=True, help_text='Will assistance be required?')
   event_contact_name = models.CharField(max_length=200, help_text='Who is responsible for the event?')
   event_contact_dept = models.CharField(max_length=200, blank=True, null=True, help_text='Which department is responsible for the event?')
-  event_contact_exec = models.PositiveIntegerField(max_length=4, choices=CONTACT_EXEC_CHOICES, help_text='Who has approved this event?')
+  event_contact_exec = models.PositiveIntegerField(max_length=4, choices=CONTACT_EXEC_CHOICES, help_text='Which executive area does the organizing department report to?')
   event_contact_phone = PhoneNumberField(help_text='123-456-7890 only please!')
   event_contact_email = models.EmailField(max_length=100, help_text='john.doe@utsa.edu')
   event_details = models.TextField(max_length=2000,help_text='Please desribe your event and the focus of the event.')
