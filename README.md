@@ -1,8 +1,7 @@
 Visualization-Wall Website
 ==========================
 
-### Django website built for University of Texas at San Antonio for the
-Visualization cluster.
+### Django website built for University of Texas at San Antonio for the Visualization cluster.
 
 This is the source code distribution of Visualization-Wall Website.
 
