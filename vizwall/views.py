@@ -87,7 +87,7 @@ def admineventrequest(request={}):
 def home(request={}, page=0):
   ''' Home'''
   news = getRecentNews(5) # Get 5 latest entries
-  events = getUpcomingEvents(4) # Get 4 upcoming events
+  events = getUpcomingEvents(5) # Get 4 upcoming events
   return render_to_response('index.html', {'news': news, 'events': events}, context_instance=RequestContext(request))
 
 def news(request={}, page=0):

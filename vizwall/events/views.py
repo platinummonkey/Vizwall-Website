@@ -21,7 +21,7 @@ DEBUGSENDMAIL = True
 
 def index(request):
   ''' REDIRECT to calendar view '''
-  return HttpResponseRedirect('/calendar/') 
+  return HttpResponseRedirect('/calendar/')
 
 def displaySingleEvent(request, event_id):
   ''' Display a single event, template controls what is public and private'''
@@ -31,7 +31,7 @@ def displaySingleEvent(request, event_id):
       return render_to_response('events/events_forbidden.html', {})
   except Event.DoesNotExist:
     raise Http404
-  return render_to_response('events/event_details.html', {'event': event})
+  return render_to_response('events/event_details.html', {'event': event}, context_instance=RequestContext(request))
 
 def displayDaysEvents(request, y, m, d):
   ''' Displays a single day's events '''
@@ -44,21 +44,16 @@ def displayDaysEvents(request, y, m, d):
           events = formatEvents(eventQuery)
   except:
     raise Http404
-  return render_to_response('events/event_day_list.html', {'events': events})
+  return render_to_response('events/event_day_list.html', {'events': events}, context_instance=RequestContext(request))
 
 def getUpcomingEvents(maxEvents):
   ''' Gets the upcoming events and returns a total of MaxEvents in a dict'''
-  #now = datetime.datetime(2011,11,1,0,0,0)
   now = datetime.datetime.now()
-  nMonth = now.month+1
-  if nMonth > 12:
-    (nMonth, nYear) = (1, now.year+1)
-  else:
-     nYear = now.year
+  nMonth = now + datetime.timedelta(weeks=12) # look 3 months into the future
   events = Event.objects.all().filter(event_is_published=True,
                  event_is_declined=False,
                  event_date__gte=datetime.date(now.year, now.month, now.day),
-                 event_date__lte=datetime.date(nYear, nMonth, now.day)).order_by('event_date')[:maxEvents]
+                 event_date__lte=datetime.date(nMonth.year, nMonth.month, nMonth.day)).order_by('event_date')[:maxEvents]
   return events
 
 def requestEvent(request):
@@ -107,7 +102,7 @@ def requestEvent(request):
   return render_to_response('events/eventrequest.html', {'form': form}, context_instance=RequestContext(request))
 
 def requestConfirm(request): #TODO
-  return render_to_response('events/event_confirm_submission.html', {})
+  return render_to_response('events/event_confirm_submission.html', {}, context_instance=RequestContext(request))
 
 def requestStatus(request, event_id): # TODO
-  return render_to_response('events/event_status.html', {})
+  return render_to_response('events/event_status.html', {}, context_instance=RequestContext(request))
