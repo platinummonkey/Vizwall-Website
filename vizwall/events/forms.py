@@ -23,6 +23,10 @@ class EventForm(ModelForm):
         'event_components_smart': CheckboxInput(),
         }
 
+  def __init__(self, *args, **kwargs):
+    self.event_id = kwargs.pop('event_id') if kwargs.get('event_id') else None
+    super(EventForm, self).__init__(*args, **kwargs)
+
   def clean_event_component_vizwall(self):
     if self.cleaned_data['event_component_vizwall']:
       return True
@@ -54,8 +58,8 @@ class EventForm(ModelForm):
     reqDate = self.cleaned_data['event_date']
     reqDuration = self.cleaned_data['event_duration']
     conflict = self.checkConflict(reqDate, reqDuration)
-    if conflict:
-      raise forms.ValidationError("This event Conflicts with another event: \"%s\" between %s-%s" % ('\n'+conflict.event_title, conflict.event_date.strftime('%H:%M'), conflict.get_end_date().strftime('%H:%M')))
+    if conflict and conflict.pk != self.event_id:
+      raise forms.ValidationError("This event Conflicts with another event: \"%s\" between %s-%s - ID# %s" % ('\n'+conflict.event_title, conflict.event_date.strftime('%H:%M'), conflict.get_end_date().strftime('%H:%M'), conflict.pk))
     # always return the cleaned data, whether it was changed or not
     return reqDate
 
@@ -71,16 +75,32 @@ class EventForm(ModelForm):
   def checkConflict(self, reqDate, reqDuration):
     '''checks current scheduled and published events if there is a conflict '''
     tom = reqDate+datetime.timedelta(days=2) # make sure full day tomorrow is included
-    daysEvents = Event.objects.all().filter(
+    if self.event_id:
+      print "event_id given"
+      daysEvents = Event.objects.all().filter(
+            event_date__gte=datetime.date(reqDate.year,reqDate.month,reqDate.day),
+            event_date__lte=datetime.date(tom.year,tom.month,tom.day),
+            event_is_published=True).exclude(pk=self.event_id)
+      print daysEvents
+    else:
+      print "event_id not given"
+      daysEvents = Event.objects.all().filter(
             event_date__gte=datetime.date(reqDate.year,reqDate.month,reqDate.day),
             event_date__lte=datetime.date(tom.year,tom.month,tom.day),
             event_is_published=True)
-    for event in daysEvents:
-      if self.inRange(event.event_date, event.event_duration, reqDate, reqDuration):
-        # conflict exists, return with conflicting event (~bool True)
-        return event
+    if daysEvents:
+      for event in daysEvents:
+        if self.inRange(event.event_date, event.event_duration, reqDate, reqDuration):
+          # conflict exists, return with conflicting event (~bool True)
+          return event
     # no conflicts, valid event time, return with nothing (~bool False)
     return False
+
+class DynamicMultipleChoiceField(MultipleChoiceField):
+  ''' Removes default django validation that values are in choices option '''
+  def validate(self, value):
+    if self.required and not value:
+      raise forms.ValidationError(self.error_messages['required'])
 
 class EventFormAdmin(EventForm):
   class Meta:
@@ -98,4 +118,7 @@ class EventFormAdmin(EventForm):
         }
 
   # representing the manytomany related field in Event
-  proctors = MultipleChoiceField()
+  proctors = DynamicMultipleChoiceField(required=False)
+
+  def clean_proctors(self):
+    return self.cleaned_data['proctors']

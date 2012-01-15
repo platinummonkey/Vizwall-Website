@@ -114,7 +114,22 @@ class Event(models.Model):
     except:
       return None
 
+  def assign_proctors_byID(self, proctorList):
+    ''' Clears old proctors then assigns new proctors based on [User.pk] '''
+    self.event_assigned_proctors.clear()
+    assignedList = []
+    for p in proctorList:
+      try:
+        user = User.objects.get(pk=p)
+        newProctor = Proctor.objects.create(event=self, user=user)
+        assignedList.append(user)
+      except:
+        continue
+    return assignedList
+
   def assign_proctors(self, proctorList):
+    ''' Clears old proctors then assigns new proctors based on [UserProfile] '''
+    self.event_assigned_proctors.clear()
     assignedList = []
     for p in proctorList:
       try:
@@ -126,6 +141,7 @@ class Event(models.Model):
     return assignedList
 
   def get_assigned_proctors(self):
+    ''' Get assigned proctors: [User] '''
     ps = self.proctor_set.all()
     proctors = []
     if ps:
@@ -135,12 +151,13 @@ class Event(models.Model):
     return None
 
   def get_unassigned_proctors(self):
+    ''' Get unassigned proctors to the event: [User]'''
     unassigned = []
     proctors = [p.user for p in self.proctor_set.all()]
     presenters = UserProfile.objects.all().filter(demo_presenter=True)
     for p in presenters:
       if p.user not in proctors:
-        unassigned.append(p)
+        unassigned.append(p.user)
     return unassigned
 
   def send_scheduler_email(self):

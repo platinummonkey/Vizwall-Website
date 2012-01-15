@@ -8,6 +8,7 @@ function addOption(theSel, theText, theValue)
 	var newOpt = new Option(theText, theValue);
 	var selLength = theSel.length;
 	theSel.options[selLength] = newOpt;
+        theSel.options[selLength].attr('selected','true');
 }
 
 function deleteOption(theSel, theIndex)
@@ -51,4 +52,14 @@ function moveOptions(theSelFrom, theSelTo)
 	}
 	
 	if(NS4) history.go(0);
+}
+
+function proctorSelectAll()
+{
+  var list = document.getElementById('id_proctors');
+  for(var i=0; i < list.options.length; i++)
+  {
+    //alert(list.options[i].value);
+    list.options[i].selected = true;
+  }
 }

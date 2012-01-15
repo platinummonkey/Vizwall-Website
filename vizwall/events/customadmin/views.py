@@ -151,7 +151,7 @@ def newEvent(request, redirectURL='/admin/events/requests/'):
                   #event_assigned_proctors=fd['event_assigned_proctors'])
         # conflicts are checked upon form validation method so no checking here!
         event.save() # have to save the event before assigning the proctors in order for the manytomany relationship to be created.
-        assignedProctors = event.assign_proctors(fd['proctors'])
+        assignedProctors = event.assign_proctors_byID(fd['proctors'])
         event.save() # save again to make the final call
         # don't send mail to schedulers! they already know!
         # send mail confirmation to requester
@@ -174,7 +174,7 @@ def newEvent(request, redirectURL='/admin/events/requests/'):
 def editEvent(request, event_id, redirectURL='/admin/events/'):
   event = get_object_or_404(Event, pk=event_id)
   if request.method == 'POST': # form submitted
-    form = EventFormAdmin(request.POST, instance=event) # repopulate form with edited data
+    form = EventFormAdmin(request.POST, instance=event, event_id=event_id) # repopulate form with edited data
     if form.is_valid(): # valid edits
       fd = form.cleaned_data
       event.event_last_modified = datetime.datetime.now()
@@ -199,11 +199,11 @@ def editEvent(request, event_id, redirectURL='/admin/events/'):
       event.event_is_declined=fd['event_is_declined']
       #event.event_assigned_proctors=fd['event_assigned_proctors']
       #event.save()
-      assignedProctors = event.assign_proctors(fd['proctors'])
+      assignedProctors = event.assign_proctors_byID(fd['proctors'])
       event.save()
       return HttpResponseRedirect(redirectURL)
   else:
-    form = EventFormAdmin(instance=event)
+    form = EventFormAdmin(instance=event, event_id=event_id)
   return render_to_response('events/customadmin/event_edit.html', {'form': form, 'event': event, 'event_id': event_id, 'req_date': event.event_req_date, 'last_mod_date': event.event_last_modified}, context_instance=RequestContext(request))
 
 @user_passes_test(is_scheduler)

@@ -87,7 +87,7 @@ def formatEvents(eventQuery):
   # compile events list into 
   for e in eventQuery:
     if e.event_date.day in events:
-      events[e.event_day.day].append(e)
+      events[e.event_date.day].append(e)
     else:
       events[e.event_date.day] = [e]
   return events
@@ -120,7 +120,7 @@ def thisMonth(request):
   c = VizCalendar(events)
   calTable = c.formatmonth(d.year, d.month)
   (nMonth, nYear, pMonth, pYear) = nextPrevMonth(d)
-  return render_to_response('events/calendar.html', {'month': d.month, 'monthName': monthNames[d.month], 'year': d.year, 'calendar': calTable, 'nextMonth': nMonth, 'nextYear': nYear, 'prevMonth': pMonth, 'prevYear': pYear})
+  return render_to_response('events/calendar.html', {'month': d.month, 'monthName': monthNames[d.month], 'year': d.year, 'calendar': calTable, 'nextMonth': nMonth, 'nextYear': nYear, 'prevMonth': pMonth, 'prevYear': pYear}, context_instance=RequestContext(request))
 
 def someMonth(request, year, month):
   ''' This method is for displaying a calendar on any other month'''
@@ -134,8 +134,8 @@ def someMonth(request, year, month):
         c = VizCalendar(events)
         calTable = c.formatmonth(year, month)
         (nMonth, nYear, pMonth, pYear) = nextPrevMonth(datetime.datetime(year, month, 1, 0, 0, 0))
-        return render_to_response('events/calendar.html',{'month': month, 'monthName': monthNames[month], 'year': year, 'calendar': calTable, 'nextMonth': nMonth, 'nextYear': nYear, 'prevMonth': pMonth, 'prevYear': pYear})
+        return render_to_response('events/calendar.html',{'month': month, 'monthName': monthNames[month], 'year': year, 'calendar': calTable, 'nextMonth': nMonth, 'nextYear': nYear, 'prevMonth': pMonth, 'prevYear': pYear}, context_instance=RequestContext(request))
   except:
     pass
-  return render_to_response('events/calendar_error.html',{'month': month, 'monthName': '', 'year': year, 'calendar': '', 'nextMonth': '', 'nextYear': '', 'prevMonth': '', 'prevYear': ''})
+  return render_to_response('events/calendar_error.html',{'month': month, 'monthName': '', 'year': year, 'calendar': '', 'nextMonth': '', 'nextYear': '', 'prevMonth': '', 'prevYear': ''}, context_instance=RequestContext(request))
 
