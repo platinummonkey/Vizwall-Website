@@ -11,14 +11,13 @@ Welcome
 
 <!--  LEFT SIDE -->
 <h1><span>VIZLAB</span> IN THE NEWS</h1>
-<div class="textholder_wide">
+<div class="textholder_wide" style=padding-top:0;>
 {% autopaginate news 15 %}
-<h2 align="center">{% paginate %}</h2>
 {% for n in news %}
 <div class="newsitem">
 <div class="newsthumb"><a href="/news/details/{{ n.pk }}/"><img src="{{ n.image_thumb }}"></a></div>
 <h1>{{ n.title }} <span><i> - {{ n.pub_date|date:"N j, Y" }}</span></i></h1>
-<p>{{ n.article }}<br><i><a href="{% if n.outside_link %}{{ n.outside_link }}{% else %}/news/details/{{ n.pk }}/{% endif %}">Read More</a></i></p>
+<p>{{ n.article|striptags|truncatewords:60 }} &nbsp; <i><a href="{% if n.outside_link %}{{ n.outside_link }}{% else %}/news/details/{{ n.pk }}/{% endif %}">Read More</a></i></p>
 </div>
 {% endfor %}
 <h2 align="center">{% paginate %}</h2>

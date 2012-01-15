@@ -61,16 +61,16 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.image.errors }}
-<label for="id_image">Profile Picture</label>
+<td class=eventtd>
+<label for="id_picture">Profile Picture</label>
 </td>
 <td class=eventtd>
-{{ form.image }}
-<span class=tip>{{ form.image.help_text }}</span>
+{{ form.picture }}
+<span class=tip>{{ form.picture.help_text }}</span>
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.faculty_position.errors }}
+<td class=eventtd>
 <label for="id_faculty_position">Faculty Position</label>
 </td>
 <td class=eventtd>
@@ -79,7 +79,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.faculty_webpage.errors }}
+<td class=eventtd>
 <label for="id_faculty_webpage">Faculty Webpage</label>
 </td>
 <td class=eventtd>
@@ -88,7 +88,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.staff_position_number.errors }}
+<td class=eventtd>
 <label for="id_staff_position_number">Staff Position Number <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -106,7 +106,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_staff.errors }}
+<td class=eventtd>
 <label for="id_is_staff">Is Moderator <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -115,7 +115,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_superuser.errors }}
+<td class=eventtd>
 <label for="id_is_superuser">Is SuperUser <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -124,7 +124,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_leadership_team.errors }}
+<td class=eventtd>
 <label for="id_is_leadership_team">Is Leadership Team <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -133,7 +133,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_vizlab_staff.errors }}
+<td class=eventtd>
 <label for="id_is_vizlab_staff">Is Vizlab Staff <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -142,7 +142,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_demo_presenter.errors }}
+<td class=eventtd>
 <label for="id_is_demo_presenter">Is Demo Presenter <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -151,7 +151,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_scheduler.errors }}
+<td class=eventtd>
 <label for="id_is_scheduler">Is Scheduler <span>*</span></label>
 </td>
 <td class=eventtd>
@@ -160,7 +160,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_event_emails_only.errors }}
+<td class=eventtd>
 <label for="id_is_event_emails_only">Event Email Force Opt-In</label>
 </td>
 <td class=eventtd>
@@ -169,7 +169,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_force_no_emails.errors }}
+<td class=eventtd>
 <label for="id_is_force_no_emails">Force No Emails</label>
 </td>
 <td class=eventtd>
@@ -178,7 +178,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.is_active.errors }}
+<td class=eventtd>
 <label for="id_is_active">Active User</label>
 </td>
 <td class=eventtd>
@@ -187,7 +187,7 @@ Edit Account
 </td>
 </tr>
 <tr class=eventrow>
-<td class=eventtd> {{ form.reset_password.errors }}
+<td class=eventtd>
 <label for="id_reset_password">Reset Password</label>
 </td>
 <td class=eventtd>
@@ -199,7 +199,9 @@ Edit Account
 <tr class=eventrow>
 <td class=eventtd colspan=2>
 {% for field in form %}
+{% if not field.field.required %}
 <span class=error>{{ field.errors }}</span>
+{% endif %}
 {% endfor %}
 </td>
 </tr>

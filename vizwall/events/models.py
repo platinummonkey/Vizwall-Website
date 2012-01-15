@@ -82,7 +82,7 @@ class Event(models.Model):
   event_details = models.TextField(max_length=2000,help_text='Please desribe your event and the focus of the event.')
   event_pub_date = models.DateTimeField(auto_now_add=True, editable=False)
   event_is_published = models.BooleanField(default=False)
-  event_assigned_proctors = models.ManyToManyField(User, blank=True)
+  event_assigned_proctors = models.ManyToManyField(User, through='Proctor')
   event_is_declined = models.BooleanField(default=False)
   
   class Meta:
@@ -114,9 +114,56 @@ class Event(models.Model):
     except:
       return None
 
+  def assign_proctors(self, proctorList):
+    assignedList = []
+    for p in proctorList:
+      try:
+        user = p.user # p is a UserProfile object
+        newProctor = Proctor.objects.create(event=self, user=user)
+        assignedList.append(user)
+      except:
+        continue
+    return assignedList
+
+  def get_assigned_proctors(self):
+    ps = self.proctor_set.all()
+    proctors = []
+    if ps:
+      for p in ps:
+        proctors.append(p.user)
+      return proctors
+    return None
+
+  def get_unassigned_proctors(self):
+    unassigned = []
+    proctors = [p.user for p in self.proctor_set.all()]
+    presenters = UserProfile.objects.all().filter(demo_presenter=True)
+    for p in presenters:
+      if p.user not in proctors:
+        unassigned.append(p)
+    return unassigned
+
+  def send_scheduler_email(self):
+    schedulers = UserProfile.objects.all().filter(is_scheduler=True).filter(force_no_emails=False)
+    subject = 'New VizLab Request %s %s' % (self.event_title, self.event_date)
+    message='VizLab Scheduler,\n  There is a new event requested. Please review the request: <a href="http://vizlab.utsa.edu/admin/events/edit/%s/">http://vizlab.utsa.edu/admin/events/edit/%s/</a>\n\n%s\n%s\n%s\n\n --Automated Message' % (self.pk, self.pk, self.event_title, self.event_date, self.event_details)
+    mass_email(schedulers, subject, message)
+
+  def send_proctor_email(self):
+    #proctors =
+    pass 
+
+  def proctor_reminder(self):
+    pass
+
   def tuple2dict(self, choices):
     d = {}
     for choice in choices:
       d[choice[0]] = choice[1]
     return d
 
+class Proctor(models.Model):
+  ''' This is an intermediate model in order to assign proctors to events'''
+  event = models.ForeignKey(Event)
+  user = models.ForeignKey(User)
+  date_assigned = models.DateTimeField(auto_now_add=True, editable=False)

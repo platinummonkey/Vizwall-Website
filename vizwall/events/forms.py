@@ -3,13 +3,11 @@ from django.forms.widgets import *
 from django.forms.extras.widgets import *
 from vizwall.events.models import Event, COMPONENT_CHOICES, dTimeFieldInputs
 import datetime
+from vizwall.accounts.models import UserProfile
 
 class EventForm(ModelForm):
   '''Event form, customized to show normal Anonymous view'''
-  event_date = DateTimeField(required=True, initial=None, input_formats=dTimeFieldInputs, help_text='Please use the date selector and check the calendar for available times!') 
-  #event_components = MultiSelectFormField(max_choices=20, required=False, choices=COMPONENT_CHOICES, initial=None, help_text='Choose all the components you will need')
-  #MultipleChoiceField(required=False, choices=COMPONENT_CHOICES, initial=None, help_text='Choose all the components you will need')
-  # widget=CheckboxSelectMultiple, choices=COMPONENT_CHOICES, initial=None, help_text='Choose all the components you will need') 
+  event_date = DateTimeField(required=True, initial=None, input_formats=dTimeFieldInputs, help_text='Please use the date selector and check the calendar for available times!')
   class Meta:
     model = Event
     #fields = ()
@@ -24,10 +22,6 @@ class EventForm(ModelForm):
         'event_components_hd2': CheckboxInput(),
         'event_components_smart': CheckboxInput(),
         }
-
-  #def clean_event_components(self):
-  #  data = self.cleaned_data.get('event_components')
-  #  return data
 
   def clean_event_component_vizwall(self):
     if self.cleaned_data['event_component_vizwall']:
@@ -91,7 +85,7 @@ class EventForm(ModelForm):
 class EventFormAdmin(EventForm):
   class Meta:
     model=Event
-    exclude=('event_pub_date', 'event_req_date', 'event_last_modified')
+    exclude=('event_pub_date', 'event_req_date', 'event_last_modified', 'event_assigned_proctors')
     widgets = {
         'event_detail': Textarea(attrs={'cols':35, 'rows':5}),
         'event_components_vizwall': CheckboxInput(),
@@ -103,6 +97,5 @@ class EventFormAdmin(EventForm):
         'event_is_declined': CheckboxInput(),
         }
 
-  def clean_event_assigned_proctors(self): #TODO
-    data = self.cleaned_data['event_assigned_proctors']
-    return data
+  # representing the manytomany related field in Event
+  proctors = MultipleChoiceField()

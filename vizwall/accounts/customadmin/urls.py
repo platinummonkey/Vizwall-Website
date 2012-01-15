@@ -5,6 +5,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('vizwall.accounts.customadmin.views',
     (r'^$', 'index'),
 
+    (r'^view/(?P<user_id>\d+)/$', 'view'),
     # create new user
     (r'^create/$', 'createUser'),
     # edit user with profile

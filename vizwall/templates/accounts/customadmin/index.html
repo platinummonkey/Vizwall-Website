@@ -16,6 +16,8 @@ Accounts
 <h2>Filter <a id="filterImageLink" href="javascript:toggleFilter('filterContentDiv', 'filterImageLink');"><img align=right src="/media/site_images/down_arrow.gif"></a></h2>
 <div id="filterContentDiv" style="display: none;">
 <form action="/admin/accounts/" method="get">{% csrf_token %}
+
+<div class=filter_table>
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr>
 <td class=eventtd width=20%> {{ filter.form.username.errors }}
@@ -23,8 +25,8 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.username }}
-<span class=tip>Search Usernames</span>
 </td>
+<td><h4 style=padding:0;margin:0;>User Permissions</h4></td><td></td>
 </tr>
 <tr>
 <td class=eventtd> {{ filter.form.first_name.errors }}
@@ -32,7 +34,12 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.first_name }}
-<span class=tip>Keyword Search</span>
+</td>
+<td class=eventtd> {{ filter.form.profile__is_scheduler.errors }}
+<label for="id_profile__is_scheduler">Scheduler</label>
+</td>
+<td class=eventtd>
+{{ filter.form.profile__is_scheduler }}
 </td>
 </tr>
 <tr>
@@ -41,7 +48,12 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.last_name }}
-<span class=tip>Keyword Search</span>
+</td>
+<td class=eventtd> {{ filter.form.profile__demo_presenter.errors }}
+<label for="id_profile__demo_presenter">Demo Presenter</label>
+</td>
+<td class=eventtd>
+{{ filter.form.profile__demo_presenter }}
 </td>
 </tr>
 <tr>
@@ -50,7 +62,12 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.last_login }}
-<span class=tip>Select Date Range</span>
+</td>
+<td class=eventtd> {{ filter.form.profile__is_leadership_team.errors }}
+<label for="id_profile__is_leadership_team">Leadership Team</label>
+</td>
+<td class=eventtd>
+{{ filter.form.profile__is_leadership_team }}
 </td>
 </tr>
 <tr>
@@ -59,52 +76,12 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.profile__staff_position }}
-<span class=tip>Choose Option to filter</span>
 </td>
-</tr>
-<tr>
-<td class=eventtd> {{ filter.form.profile__is_scheduler.errors }}
-<label for="id_profile__is_scheduler">Scheduler</label>
-</td>
-<td class=eventtd>
-{{ filter.form.profile__is_scheduler }}
-<span class=tip>Filter permissions</span>
-</td>
-</tr>
-<tr>
-<td class=eventtd> {{ filter.form.profile__demo_presenter.errors }}
-<label for="id_profile__demo_presenter">Demo Presenter</label>
-</td>
-<td class=eventtd>
-{{ filter.form.profile__demo_presenter }}
-<span class=tip>Filter permissions</span>
-</td>
-</tr>
-<tr>
-<td class=eventtd> {{ filter.form.profile__is_leadership_team.errors }}
-<label for="id_profile__is_leadership_team">Leadership Team</label>
-</td>
-<td class=eventtd>
-{{ filter.form.profile__is_leadership_team }}
-<span class=tip>Filter permissions</span>
-</td>
-</tr>
-<tr>
 <td class=eventtd> {{ filter.form.profile__is_vizlab_staff.errors }}
 <label for="id_profile__is_vizlab_staff">Vizlab Staff</label>
 </td>
 <td class=eventtd>
 {{ filter.form.profile__is_vizlab_staff }}
-<span class=tip>Filter permissions</span>
-</td>
-</tr>
-<tr>
-<td class=eventtd> {{ filter.form.profile__extra_get_event_emails.errors }}
-<label for="id_profile__extra_get_event_emails">Opt-in Event Emails</label>
-</td>
-<td class=eventtd>
-{{ filter.form.profile__extra_get_event_emails }}
-<span class=tip>Filter permissions</span>
 </td>
 </tr>
 <tr>
@@ -113,8 +90,8 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.profile__force_no_emails }}
-<span class=tip>Filter permissions</span>
 </td>
+<td></td><td></td>
 </tr>
 <tr>
 <td class=eventtd> {{ filter.form.o.errors }}
@@ -122,18 +99,20 @@ Accounts
 </td>
 <td class=eventtd>
 {{ filter.form.o }}
-<span class=tip>Change ordering</span>
 </td>
+<td></td><td></td>
 </tr>
 <tr class=eventrow>
 <td class=eventtd>
 </td>
 <td class=eventtd>
-<input type="submit" value="Filter Results">
+<input type="submit" value="Apply Filter">
 </td>
+<td></td><td></td>
 </tr>
 </table>
 </form>
+</div>
 </div>
 </div>
 

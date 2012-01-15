@@ -7,6 +7,11 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.admin.views.decorators import staff_member_required
 
+# uploaded picture handling
+from vizwall.utils import handle_uploaded_picture
+MAX_IMG_SIZE = (100, 100) # (width, height)
+THUMB_IMG_SIZE = (50, 50)
+
 # Email actions
 from django.core.mail import send_mail
 from vizwall.accounts.models import UserProfile
@@ -33,16 +38,19 @@ def editNews(request, news_id):
   try:
     news = News.objects.get(pk=news_id)
     if request.method == 'POST': # form submitted
-      form = NewsFormAdmin(request.POST, instance=news) # repopulate form with edited data
+      form = NewsFormAdmin(request.POST, request.FILES, instance=news) # repopulate form with edited data
       if form.is_valid(): # valid edits
         #form.save() # save and redirect back to the news page
         news.pub_date = datetime.datetime.now()
         news.title = form.cleaned_data['title']
         news.article = form.cleaned_data['article']
-        if form.cleaned_data['image']: news.image = form.cleaned_data['image']
-        if form.cleaned_data['image_thumb']: news.image_thumb = form.cleaned_data['image_thumb']
-        if form.cleaned_data['outside_link']: news.outside_link = form.cleaned_data['outside_link']
-        news.is_published = form.cleaned_data['is_published']
+        (filename, content) = handle_uploaded_picture(request.FILES['image'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+        news.image.delete()
+        news.image.save(filename[0], content[0])
+        news.image_thumb.delete()
+        news.image_thumb.save(filename[1], content[1])
+        news.outside_link = form.cleaned_data['outside_link'] if form.cleaned_data['outside_link'] else None
+        news.is_published = True if form.cleaned_data['is_published'] else False
         news.save()
         return HttpResponseRedirect('/admin/news/')
     else: # form not submitted, create populated form for editing
@@ -60,6 +68,8 @@ def deleteNews(request, news_id):
     news = News.objects.get(pk=news_id)
     if request.method == 'POST': # form submitted
       if request.POST['confirm'] == u'Yes':
+        news.picture.delete()
+        news.picture_thumb.delete()
         news.delete() # deletes! no backups!
         if request.GET and request.GET.has_key('page'):
           pagenum = request.GET['page']

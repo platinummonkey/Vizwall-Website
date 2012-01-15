@@ -22,14 +22,14 @@ News
 </tr>
 <tr class=el_title>
 <td class=el_start><strong>Article Title</strong></td>
-<td><strong>Article Body</strong></td>
+<!--<td><strong>Article Body</strong></td>-->
 <td><strong>Published?</strong></td>
 <td class=el_end><strong>Action</strong></td>
 </tr>
 {% for n in news %}
 <tr>
 <td class=el_start><a href="edit/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">{{ n.title }}</a></td>
-<td>{{ n.article|truncatewords:15 }}</td>
+<!--<td>{{ n.article|truncatewords:15 }}</td>-->
 <td>{% if n.is_published %}{{ n.pub_date|date:"n/j/y h:i A" }}{% else %}No{% endif %}</td>
 <td class=el_end><a href="/news/details/{{ n.pk }}/">View</a> | {% if n.is_published %}<a href="unpublish/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">Unpublish</a>{% else %}<a href="publish/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">Publish</a>{% endif %} | <a href="edit/{{ n.pk }}/">Edit</a> | <a href="delete/{{ n.pk }}/{% if pagenum %}?page={{ pagenum }}{% endif %}">Delete</a></td>
 </tr>

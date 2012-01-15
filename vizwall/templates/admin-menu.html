@@ -25,7 +25,7 @@ Admin Menu
 </div>
 
 <div class="right-menu">
-<h3 style=margin-bottom:10px;>General Site Stats</h3>
+<h3 style=margin-bottom:10px;>Event Request Stats</h3>
 	<div class=event_list_compact>
 		<table cellpadding=0 cellspacing=0 width=100%>
                 {% for stat in stats %}
@@ -60,7 +60,7 @@ Admin Menu
 <td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
 <td><a href="/admin/events/edit/{{ e.pk }}/">{{ e.event_title|truncatewords:5 }}</a></td>
 <td><a href="mailto:{{ e.event_contact_email }}">{{ e.event_contact_name }}</a></td>
-<td class=el_end><a href="confirm/{{ e.pk }}/">Confirm</a> | <a href="edit/{{ e.pk }}/">Edit</a> | <a href="decline/{{ e.pk }}/">Decline</a> | <a href="delete/{{ e.pk }}/">Delete</a></td>
+<td class=el_end><a href="events/requests/confirm/{{ e.pk }}/">Confirm</a> | <a href="events/requests/edit/{{ e.pk }}/">Edit</a> | <a href="events/requests/decline/{{ e.pk }}/">Decline</a> | <a href="events/requests/delete/{{ e.pk }}/">Delete</a></td>
 </tr>
 {% endfor %}
 {% else %}
@@ -105,15 +105,13 @@ Admin Menu
 {% if news %}
 <td class=el_start><strong>Article Date</strong></td>
 <td><strong>Article Title</strong></td>
-<td><strong>Outside Link</strong></td>
-<td class=el_end><strong>Snippet</strong></td>
+<td class=el_end><strong>Source</strong></td>
 </tr>
 {% for n in news %}
 <tr>
 <td class=el_start>{{ n.pub_date|date:"n/j/y h:i A" }}</td>
-<td><a href="/news/{{ n.pk }}/">{{ n.title|truncatewords:5 }}</a></td>
-<td><a href="{{ n.outside_link }}">Link</a></td>
-<td class=el_end>{{ n.article|truncatewords:5 }}</td>
+<td><a href="/news/details/{{ n.pk }}/">{{ n.title|truncatewords:5 }}</a></td>
+<td class=el_end><a href="{{ n.outside_link }}">Link</a></td>
 </tr>
 {% endfor %}
 {% else %}

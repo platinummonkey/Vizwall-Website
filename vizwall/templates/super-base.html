@@ -71,7 +71,7 @@
 <link rel="stylesheet" type="text/css" href="/media/css/datetimepicker.css">
 <script type="text/javascript" src="/media/js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="/media/js/timepicker.js"></script>
-<script type="text/javascript" src="/media/js/toggle.js"</script>
+<script type="text/javascript" src="/media/js/toggle.js"></script>
 <script type="text/javascript">
   $(function(){
     $('#id_event_date').datetimepicker({
@@ -93,6 +93,8 @@
 .ui-timepicker-div td { font-size: 90%; }
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 </style>
+{% block extrahead %}
+{% endblock %}
 </head>
 <body>
 <div id="container">

@@ -12,128 +12,133 @@ Events Report
 <!--  START CONTENT -->
 <!--  LEFT SIDE -->
 <h1>Event Report</span></h1>
-<div class="textholder_wide">
-<h2>Filter <a id="filterImageLink" href="javascript:toggleFilter('filterContentDiv', 'filterImageLink');"><img align=right src="/media/site_images/down_arrow.gif"></a></h2>
+<div class="textholder_wide" style=padding-top:0>
+<h2><span style=float:right;display:block;margin-top:10px;><a id="filterImageLink" href="javascript:toggleFilter('filterContentDiv', 'filterImageLink');"><img src="/media/site_images/down_arrow.gif"></a></span>Filter</h2>
 <div id="filterContentDiv" style="display: none;">
 <form action="/admin/events/reports/" method="get">{% csrf_token %}
 {{ filter.form.non_field_errors }}
+
+<div id="filterContentDiv" class=filter_table>
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr>
-<td class=eventtd width=20%> {{ filter.form.event_title.errors }}
+<td>{{ filter.form.event_title.errors }}
 <label for="id_event_title">Event Title</label>
 </td>
-<td class=eventtd>
+<td>
 {{ filter.form.event_title }}
-<span class=tip>Keyword Search</span>
+
 </td>
-</tr>
-<tr class=eventrow>
-<td class=eventtd>
-<label for="id_event_date">Date & Time</label>
-</td>
-<td class=eventtd>
-{{ filter.form.event_date }}
-<span class=tip>Select Date Range</span>
-</td>
-</tr>
-<tr class=eventrow>
-<td class=eventtd>
-<label for="event_duration">Event Duration</label>
-</td>
-<td class=eventtd>
-{{ filter.form.event_duration }}
-<span class=tip>Length of the event</span>
-</td>
-</tr>
-<tr class=eventrow>
-<td class=eventtd>
-<label for="event_visitors"># of Attendees</label>
-</td>
-<td class=eventtd>
-{{ filter.form.event_visitors }}
-<span class=tip>Select Number of Visitors</span>
-</td>
-</tr>
-<tr class=eventrow>
-<td class=eventtd valign=top>
-<label for="event_name">Components Needed</label>
-</td>
-<td class=eventtd>
-Vis Wall: {{ filter.form.event_component_vizwall }}<br>
-3D TV: {{ filter.form.event_component_3dtv }}<br>
-Omni: {{ filter.form.event_component_omni }}<br>
-HD2: {{ filter.form.event_component_hd2 }}<br>
-Smart Board: {{ filter.form.event_component_smart }}<br>
-<span class=tip>Select the components that will be needed.</span>
-</td>
-</tr>
-<tr class=eventrow>
-<td class=eventtd>
-<label for="event_contact_dept">Department</label>
-</td>
-<td class=eventtd>
-{{ filter.form.event_contact_dept }}
-<span class=tip>Keyword Search</span>
-</td>
-</tr>
-<tr class=eventrow>
-<td class=eventtd>
-<label for="event_contact_exec">Executive Office</label>
-</td>
-<td class=eventtd>
-{{ filter.form.event_contact_exec }}
-<span class=tip>Select an Office</span>
-</td>
+<td><h4 style=padding:0;margin:0;>Components Requested:</h4></td><td></td>
 </tr>
 <tr>
-<td class=eventtd> {{ filter.form.o.errors }}
+<td>
+<label for="id_event_date">Date & Time</label>
+</td>
+<td>
+{{ filter.form.event_date }}
+
+</td>
+<td>Vis Wall</td><td>{{ filter.form.event_component_vizwall }}</td>
+</tr>
+<tr>
+<td>
+<label for="event_duration">Event Duration</label>
+</td>
+<td>
+{{ filter.form.event_duration }}
+
+</td>
+<td>3D TV</td><td>{{ filter.form.event_component_3dtv }}</td>
+</tr>
+<tr>
+<td>
+<label for="event_visitors"># of Attendees</label>
+</td>
+<td>
+{{ filter.form.event_visitors }}
+
+</td>
+<td>Omni</td><td>{{ filter.form.event_component_omni }}</td>
+</tr>
+<tr>
+<td>
+<label for="event_contact_dept">Department</label>
+</td>
+<td>
+{{ filter.form.event_contact_dept }}
+</td>
+<td>HD2</td><td>{{ filter.form.event_component_hd2 }}</td>
+</tr>
+<tr>
+
+<td>
+<label for="event_contact_exec">Executive Office</label>
+</td>
+<td>
+{{ filter.form.event_contact_exec }}
+</td>
+<td>Smart Board</td><td>{{ filter.form.event_component_smart }}</td>
+</tr>
+<tr>
+<td> {{ filter.form.o.errors }}
 <label for "id_o">Order By</label>
 </td>
-<td class=eventtd>
+<td>
 {{ filter.form.o }}
-<span class=tip>Change ordering</span>
 </td>
+<td></td><td></td>
 </tr>
-<tr class=eventrow>
-<td class=eventtd>
+<tr>
+<td>
 </td>
-<td class=eventtd>
+<td>
 <input type="submit" value="Filter Results">
 </td>
+<td></td><td></td>
 </tr>
 </table>
 </form>
 </div>
 </div>
+</div>
 
-<div class="textholder_wide">
-<h2>Results</h2><br />
+<div class="textholder_wide" style=padding-top:0>
+<h2><span style=float:right><a href="{{ csvDownloadLink }}">Download CSV</a></span>Report Results</h2>
 {% autopaginate filter.qs 40 as filter_list %}
-<h4 align=right><a href="{{ csvDownloadLink }}">Download CSV</a></h4>
-<center>{% paginate %}</center>
+
+
+<h3>Results Summary</h3>
 <div class="event_list">
 <table cellpadding=0 cellspacing=0 width=100%>
-<tr class=el_title>
-<td class=el_start><strong># of Events</strong></td>
-<td><strong>Duration Average</strong></td>
-<td><strong>Visitors Average</strong></td>
-<td><strong># VizWall Requests</strong></td>
-<td><strong># 3D TV Requests</strong></td>
-<td><strong># Omni Requests</strong></td>
-<td><strong># HD2 Requests</strong></td>
-<td class=el_end><strong># Smart Board Requests</td>
+
+<tr>
+<td class=el_start><strong>Number of Events</strong></td>
+<td>{{ count }}</td>
+<td class=el_start><strong># VizWall Requests</strong></td>
+<td>{{ count_vizwall }}</td>
+<td class=el_start><strong># HD2 Requests</strong></td>
+<td class=el_end>{{ count_hd2 }}</td>
 </tr>
 <tr>
-<td class=el_start>{{ count }}</td>
+<td class=el_start><strong>Duration Average</strong></td>
 <td>{{ duration_avg }}</td>
-<td>{{ visitors_avg }}</td>
-<td>{{ count_vizwall }}</td>
+<td class=el_start><strong># 3D TV Requests</strong></td>
 <td>{{ count_3dtv }}</td>
-<td>{{ count_omni }}</td>
-<td>{{ count_hd2 }}</td>
+<td class=el_start><strong># Smart Board Requests</td>
 <td class=el_end>{{ count_smart }}</td>
 </tr>
-</table><br /><br />
+<tr>
+<td class=el_start><strong>Visitors Average</strong></td>
+<td>{{ visitors_avg }}</td>
+<td class=el_start><strong># Omni Requests</strong></td>
+<td>{{ count_omni }}</td>
+<td></td><td class=el_end></td>
+</tr>
+</table></div>
+
+
+<h3>Results Breakdown</h3>
+<div class="event_list">
 <table cellpadding=0 cellspacing=0 width=100%>
 <tr class=el_title>
 <td class=el_start><strong>Title</strong></td>
@@ -141,7 +146,7 @@ Smart Board: {{ filter.form.event_component_smart }}<br>
 <td><strong>Duration</strong></td>
 <td><strong># Attendees</strong></td>
 <td><strong>Department</strong></td>
-<td class=el_end><strong>Components</strong></td>
+<td><strong>Components</strong></td>
 </tr>
 {% for e in filter_list %}
 <tr>
@@ -160,7 +165,20 @@ Smart Board: {{ filter.form.event_component_smart }}<br>
 </table>
 </div>
 <center>{% paginate %}</center>
-<br /><h4 align=right><a href="{{ csvDownloadLink }}">Download CSV</a></h4>
+</div>
+
+<div class="textholder_wide">
+
+<table style=margin-left:20px;>
+<tr>
+<td><img src=/media/site_images/vizwall_icon.png></td><td style="padding-right:30px;"> - VizWall</td>
+<td><img src=/media/site_images/3dtv_icon.png></td><td style="padding-right:30px;"> - 3D TV</td>
+<td><img src=/media/site_images/omni_icon.png></td><td style="padding-right:30px;"> - Omni</td>
+<td><img src=/media/site_images/hd2_icon.png></td><td style="padding-right:30px;"> - HD2</td>
+<td><img src=/media/site_images/smart_icon.png></td><td style="padding-right:30px;"> - SmartBoard</td>
+</tr>
+</table>
+
 </div>
 
 <div class="clear"></div>

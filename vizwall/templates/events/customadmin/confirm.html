@@ -8,11 +8,11 @@ Confirm {% if mode == 'delete' %}Deletion{% endif %}{% if mode == 'deactivate'%}
 <!--  START CONTENT -->
 
 <!--  LEFT SIDE -->
-<h1>NEWS ARTICLE DETAIL</span></h1>
+<h1>Confirm Event Deletion</span></h1>
 <div class="textholder_wide">
-<form action="/admin/news/{% if mode == 'delete' %}delete{% endif %}{% if mode == 'deactivate'%}decline{% endif %}/{{ event_id }}/" method="post">{% csrf_token %}
-<p align=center>Are you sure you want to {% if mode == 'delete' %}Deletion{% endif %}{% if mode == 'deactivate'%}Decline{% endif %} <span>{{ event.event_title }}</span>?<br>
-<input type="submit" name="confirm" value="Yes">
+<form action="/admin/events/{% if mode == 'delete' %}delete{% endif %}{% if mode == 'deactivate'%}decline{% endif %}/{{ event_id }}/" method="post">{% csrf_token %}
+<p align=center>Are you sure you want to {% if mode == 'delete' %}delete{% endif %}{% if mode == 'deactivate'%}decline{% endif %} event: <span>{{ event.event_title }}</span>?<br>
+<br><input type="submit" name="confirm" value="Yes">
 <input type="submit" name="confirm" value="No"></p>
 
 </div>

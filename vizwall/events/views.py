@@ -7,8 +7,9 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 # Email actions
-from django.core.mail import send_mail
 from vizwall.accounts.models import UserProfile
+from vizwall.utils import mass_email
+from vizwall.settings import REQUESTER_NEW_REQUEST, SCHED_NEW_REQUEST
 
 # Events stuff
 from vizwall.events.models import Event
@@ -16,7 +17,7 @@ from vizwall.events.viewscalendar import formatEvents
 from vizwall.events.forms import *
 
 # debug
-DEBUGSENDMAIL = False
+DEBUGSENDMAIL = True
 
 def index(request):
   ''' REDIRECT to calendar view '''
@@ -86,19 +87,15 @@ def requestEvent(request):
       # conflicts are checked upon form validation method so no checking here!
       event.save()
       # send mail to schedulers about new event
-      schedulers = UserProfile.objects.all().filter(is_scheduler=True,force_no_emails=False)
-      recipients = []
-      for s in schedulers:
-        recipients.append(s.user.email)
-      sender='no-reply@vizwall.utsa.edu'
-      subject='New Request: %s %s' % (event.event_title, event.event_date)
-      message='VizLab Scheduler,\n  There is a new event requested. Please review the request: <a href="http://vizlab.utsa.edu/admin/events/edit/%s/">http://vizlab.utsa.edu/admin/events/edit/%s/</a>\n\n%s\n%s\n%s\n\n --Automated Message' % (event.pk, event.pk, event.event_title, event.event_date, event.event_details)
-      if DEBUGSENDMAIL: send_mail(subject, message, sender, recipients)
+      schedulers = [u.user.email for u in UserProfile.objects.all().filter(is_scheduler=True,force_no_emails=False)]
+      subject=SCHED_NEW_REQUEST[0] % (event.event_title, event.event_date)
+      message=SCHED_NEW_REQUEST[1] % (event.pk, event.pk, event.event_title, event.event_date, event.event_details)
+      mass_email(subject, message, recipients=schedulers)
       # send mail confirmation to requester
       recipients = [event.event_contact_email]
-      subject='VizLab Request: %s %s' % (event.event_title, event.event_date)
-      message='%s,\n\n  Thank you for your request. Please be patient while your event is reviewed prior to approval.\n\n%s\n%s\n%s\n\n -VizLab Team\n\n--This is an automated message, replying to this message will be ignored.' % (event.event_contact_name, event.event_title, event.event_date, event.event_details)
-      if DEBUGSENDMAIL: send_mail(subject, message, sender, recipients)
+      subject=REQUESTER_NEW_REQUEST[0] % (event.event_title, event.event_date)
+      message=REQUESTER_NEW_REQUEST[1] % (event.event_contact_name, event.event_title, event.event_date, event.event_details)
+      mass_email(subject, message, recipients=recipients)
     except:
       # Something bad happened, apologize and tell them to contact us.
       return render_to_response('events/eventrequest.html', {'form': form}, context_instance=RequestContext(request))

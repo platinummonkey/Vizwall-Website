@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.localflavor.us.models import PhoneNumberField
+from vizwall.settings import UPLOAD_ROOT, ACCOUNTS_UPLOAD_URL
+from vizwall.utils import CustomFileSystemStorage as CFSS
 
+#upload_storage = upload_storage = FileSystemStorage(location=ACCOUNTS_UPLOAD_ROOT, base_url=ACCOUNTS_UPLOAD_URL)
+upload_storage = upload_storage = CFSS(location=UPLOAD_ROOT, base_url=ACCOUNTS_UPLOAD_URL)
 
 STAFF_TITLE_CHOICES = (
   # THESE MUST BE IN ORDER BY NUMBER IN ORDER FOR get_staff_position to work!
@@ -33,7 +37,9 @@ class UserProfile(models.Model):
   staff_position = models.IntegerField(choices=STAFF_TITLE_CHOICES, default=STAFF_TITLE_CHOICES[0][0])
   staff_faculty_position = models.CharField(max_length=500, blank=True, null=True)
   formal_name = models.CharField(max_length=50, choices=NAME_FORMALITIES_PREFIX, default='none')
-  picture = models.ImageField(upload_to='/media/profiles/avatars', default='/media/site_images/userprofile.jpg')
+  picture = models.ImageField(upload_to='accounts/', default='accounts/default_profile.jpg', storage=upload_storage)
+  #picture_thumb = ImageSpec([resize.Fit(width=80, height=80, upscale=True)], image_field='picture', format='JPEG', options={'quality': 85}, pre_cache=True, cache_to=ACCOUNTS_UPLOAD_ROOT + 'accounts', storage=upload_storage, autoconvert=True)
+  picture_thumb = models.ImageField(upload_to='accounts/', default='accounts/default_profile_thumb.jpg', storage=upload_storage)
   is_leadership_team = models.BooleanField(default=False)
   is_vizlab_staff = models.BooleanField(default=False)
   faculty_webpage = models.URLField(default='', blank=True)
@@ -47,6 +53,10 @@ class UserProfile(models.Model):
   def __unicode__(self):
     return self.get_formal_name()
 
+  #def save(self, *args, **kwargs):
+  #  super(UserProfile, self).save(*args, **kwargs)
+  #  self.picture_thumb.generate()
+
   def get_staff_position(self):
     d = self.tuple2dict(STAFF_TITLE_CHOICES)
     return d[self.staff_position]
@@ -56,6 +66,9 @@ class UserProfile(models.Model):
       return self.user.get_full_name()
     else:
       return '%s %s' % (self.formal_name, self.user.get_full_name())
+
+  def get_assigned_events(self):
+    return self.user.event_set.all()
   
   def tuple2dict(self, choices):
     d = {}

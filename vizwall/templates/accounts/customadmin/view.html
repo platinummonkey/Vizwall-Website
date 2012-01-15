@@ -1,0 +1,28 @@
+{% extends "base-admin.html" %}
+{% load pagination_tags %}
+
+{% block title %}
+Accounts
+{% endblock %}
+
+{% block content %}
+
+
+<!--  START CONTENT -->
+
+<!--  LEFT SIDE -->
+<h1>MANAGE ACCOUNTS</h1>
+<div class="textholder_wide">
+<table>
+<tr><td>Username</td><td>{{ u.username }}</td></tr>
+{% if u.profile.picture %}<tr><td>Picture</td><td><img src="{{ u.profile.picture.url }}"></td></tr>
+<tr><td>Thumbnail</td><td><img src="{{ u.profile.picture_thumb.url }}"></td></tr>{% endif %}
+</table>
+</div>
+</div>
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+
+{% endblock %}

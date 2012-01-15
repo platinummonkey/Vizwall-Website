@@ -10,9 +10,9 @@ class NewsFormAdmin(ModelForm):
   class Meta:
     model = News
     #fields = ()
-    #exclude=('pub_date')
+    exclude=('pub_date', 'image_formatted', 'image_thumb')
     widgets = {
-        'article': Textarea(attrs={'cols':35, 'rows': 5}),
+        'article': Textarea(attrs={'cols':50, 'rows': 10}),
         'is_published': CheckboxInput(),
         }
 

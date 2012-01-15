@@ -10,8 +10,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404
 
 # Email actions
-from django.core.mail import send_mail
 from vizwall.accounts.models import UserProfile
+from vizwall.utils import mass_email
+from vizwall.settings import REQUESTER_NEW_REQUEST
 
 # Events stuff
 from vizwall.events.models import Event
@@ -24,7 +25,7 @@ from django.db.models import Avg, Sum, Count, Max, Min #, StdDev, Varience
 import csv
 
 # debug
-DEBUGSENDMAIL = False
+DEBUGSENDMAIL = True
 
 def is_scheduler(u):
   if u.is_authenticated():
@@ -115,6 +116,7 @@ def declineEvent(request, event_id, redirectURL='/admin/events/requests/'):
   event = get_object_or_404(Event, pk=event_id)
   event.event_is_declined = True
   event.event_is_published = False
+  event.proctors.clear()
   event.save()
   return HttpResponseRedirect(redirectURL)
 
@@ -145,16 +147,18 @@ def newEvent(request, redirectURL='/admin/events/requests/'):
                   event_contact_email=fd['event_contact_email'],
                   event_details=fd['event_details'],
                   event_is_published=fd['event_is_published'],
-                  event_is_declined=fd['event_is_declined'],
-                  event_assigned_proctors=fd['event_assigned_proctors'])
+                  event_is_declined=fd['event_is_declined'])
+                  #event_assigned_proctors=fd['event_assigned_proctors'])
         # conflicts are checked upon form validation method so no checking here!
-        event.save()
+        event.save() # have to save the event before assigning the proctors in order for the manytomany relationship to be created.
+        assignedProctors = event.assign_proctors(fd['proctors'])
+        event.save() # save again to make the final call
         # don't send mail to schedulers! they already know!
         # send mail confirmation to requester
         recipients = [event.event_contact_email]
-        subject='VizLab Request: %s %s' % (event.event_title, event.event_date)
-        message='%s,\n\n  Thank you for your request. Please be patient while your event is reviewed prior to approval.\n\n%s\n%s\n%s\n\n -VizLab Team\n\n--This is an automated message, replying to this message will be ignored.' % (event.event_contact_name, event.event_title, event.event_date, event.event_details)
-        if DEBUGSENDMAIL: send_mail(subject, message, sender, recipients)
+        subject=REQUESTER_NEW_REQUEST[0] % (event.event_title, event.event_date)
+        message=REQUESTER_NEW_REQUEST[1] % (event.event_contact_name, event.event_title, event.event_date, event.event_details)
+        mass_email(subject, message, recipients = recipients)
       except:
         # Something bad happened, apologize and tell them to contact us.
         return render_to_response('events/customadmin/eventrequest.html', {'form': form}, context_instance=RequestContext(request))
@@ -167,7 +171,7 @@ def newEvent(request, redirectURL='/admin/events/requests/'):
 
 
 @user_passes_test(is_scheduler)
-def editEvent(request, event_id, redirectURL='/admin/events//'):
+def editEvent(request, event_id, redirectURL='/admin/events/'):
   event = get_object_or_404(Event, pk=event_id)
   if request.method == 'POST': # form submitted
     form = EventFormAdmin(request.POST, instance=event) # repopulate form with edited data
@@ -193,12 +197,14 @@ def editEvent(request, event_id, redirectURL='/admin/events//'):
       event.event_details=fd['event_details']
       event.event_is_published=fd['event_is_published']
       event.event_is_declined=fd['event_is_declined']
-      event.event_assigned_proctors=fd['event_assigned_proctors']
+      #event.event_assigned_proctors=fd['event_assigned_proctors']
+      #event.save()
+      assignedProctors = event.assign_proctors(fd['proctors'])
       event.save()
       return HttpResponseRedirect(redirectURL)
   else:
     form = EventFormAdmin(instance=event)
-  return render_to_response('events/customadmin/event_edit.html', {'form': form, 'event_id': event_id, 'req_date': event.event_req_date, 'last_mod_date': event.event_last_modified}, context_instance=RequestContext(request))
+  return render_to_response('events/customadmin/event_edit.html', {'form': form, 'event': event, 'event_id': event_id, 'req_date': event.event_req_date, 'last_mod_date': event.event_last_modified}, context_instance=RequestContext(request))
 
 @user_passes_test(is_scheduler)
 def deleteEvent(request, event_id, redirectURL='/admin/events/requests/'):
@@ -206,6 +212,7 @@ def deleteEvent(request, event_id, redirectURL='/admin/events/requests/'):
   event = get_object_or_404(Event, pk=event_id)
   if request.method == 'POST': # form submitted
     if request.POST['confirm'] == u'Yes':
+      event.proctors.clear()
       event.delete() # deletes! no backups!
     return HttpResponseRedirect(redirectURL)
   return render_to_response('events/customadmin/confirm.html', {'mode': 'delete', 'event_id': event_id, 'event': event}, context_instance=RequestContext(request))
@@ -218,6 +225,7 @@ def deactivateEvent(request, event_id, redirectURL='/admin/events/requests/'):
     if request.POST['confirm'] == u'Yes':
       event.is_published=False
       event.is_declined=False
+      event.proctors.clear()
       event.save()
     return HttpResponseRedirect(redirectURL)
   return render_to_response('events/customadmin/confirm.html', {'mode': 'deactivate', 'event_id': event_id, 'event': event}, context_instance=RequestContext(request))

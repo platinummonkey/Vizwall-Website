@@ -467,6 +467,15 @@ font-weight:bold;
 }
 
 
+.filter_table{
+padding:20px 12px;
+}
+.filter_table table td{
+padding:8px;
+font-size:14px;
+vertical-align:top;
+}
+
 table.calendar    { border-left:1px solid #0a1f38; }
 tr.calendar-row  {  }
 td.calendar-day  { min-height:80px; font-size:11px; position:relative; vertical-align:top;} * html div.calendar-day { height:80px; }
