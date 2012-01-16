@@ -11,8 +11,7 @@ from django.shortcuts import get_object_or_404
 
 # Email actions
 from vizwall.accounts.models import UserProfile
-from vizwall.utils import mass_email
-from vizwall.settings import REQUESTER_NEW_REQUEST
+from vizwall.mailer import mail_send
 
 # Events stuff
 from vizwall.events.models import Event
@@ -61,7 +60,6 @@ def getDeclinedEvents(request):
       declinedEvents = None
   return declinedEvents
 
-
 @staff_member_required
 def index(request):
   ''' Default events view that displays pending events and report generation '''
@@ -69,7 +67,6 @@ def index(request):
   activeEvents = getActiveEvents()[:5]
   declinedEvents = getDeclinedEvents(request)[:5]
   return render_to_response('events/customadmin/index.html',{'pendingevents': pendingEvents,'activeevents':activeEvents},context_instance=RequestContext(request))
-
 
 # Page listings
 @user_passes_test(is_scheduler)
@@ -120,7 +117,7 @@ def declineEvent(request, event_id, redirectURL='/admin/events/requests/'):
   proctors = [u.email for u in ps] if proctors else None
   if proctors: mail_send(proctors, event, 'mail/proctor_event_removed', calendar=True, calendarCancel=True)
   event.event_assigned_proctors.clear()
-   mail_send([event.event_contact_email], event, 'mail/requester_deny_request')
+  mail_send([event.event_contact_email], event, 'mail/requester_deny_request')
   event.save()
   return HttpResponseRedirect(redirectURL)
 

@@ -17,34 +17,37 @@
 <h2>Event Information</h2>
 <p>
 <strong>Event Title:</strong> {{ event.event_title|title }}<br>
-{% if user.is_staff %}<strong>Request Date:</strong> [event_req_date]<br><!--  Admin Only -->{% endif %}
-<strong>Event Date:</strong> {{ event.event_date }}<br>
+{% if user.is_staff %}<strong>Date of Request:</strong> {{ event.event_req_date|date:"n/j/y h:i A" }}<br><!--  Admin Only -->{% endif %}
+<strong>Event Date:</strong> {{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}<br>
 <strong>Duration</strong> {{ event.get_duration }}<br>
-<strong>Audience:</strong> {{ event.get_audience }}<br>
+<strong>Audience:</strong> {% if event.get_audience %}{{ event.get_audience }}{% else %}None Specified{% endif %}<br>
 <strong>Number of Visitors:</strong> {{ event.event_visitors }}<br>
-{% if user.is_staff %}<strong>Components Needed:</strong> {% if event.event_components.vizwall %}VizWall<br>{% endif %}
-{% if event.event_components.3dtv %}3D TV<br>{% endif %}
-{% if event.event_components.omni %}Omni<br>{% endif %}
-{% if event.event_components.hd2 %}HD2<br>{% endif %}
-{% if event.event_components.smart %}Smartboard<br>{% endif %}<br><!--  Admin Only -->
-<strong>Assistance Needed?:</strong> [Yes if true]<br><!--  Admin Only -->
+{% if user.is_staff %}<strong>Components Needed:</strong> {% if event.get_cs_components %}{{ event.get_cs_components }}<br>{% endif %}
+<strong>Assistance Needed?:</strong>{% if event.event_assistance %}Yes{% else %}No{% endif %}<br><!--  Admin Only -->
 <strong>Event Description:</strong><br>
-[event_details]<!--  Admin Only -->{% endif %}
+{{ event.event_details }}<!--  Admin Only -->{% endif %}
 </p>
 
 {% if user.is_staff %}
 <!-- This whole block Admin Only -->
 <h2>Contact Information</h2>
 <p>
-<strong>Name:</strong> [event_contact_name]<br>
-<strong>Department:</strong> [event_contact_dept]<br>
-<strong>Executive Office:</strong> [event_contact_exec]<br>
-<strong>Phone Number</strong> [event_contact_phone]<br>
-<strong>Email Address:</strong> [event_contact_email]
+<strong>Name:</strong> {{ event.event_contact_name }}<br>
+<strong>Department:</strong> {{ event.event_contact_dept }}<br>
+<strong>Executive Office:</strong> {{ event.get_contact_exec }}<br>
+<strong>Phone Number</strong> {{ event.event_contact_phone}}<br>
+<strong>Email Address:</strong> {{ event.event_contact_email}}
 </p>
 <!-- That whole bloack Admin Only -->
 {% endif %}
 
+{% if event.get_assigned_proctors %}
+<h2>Assigned Proctors</h2>
+<ul>
+{% for p in event.get_assigned_proctors %}<li>{{ p.profile.get_formal_name }}</li>
+{% endfor %}
+</ul>
+{% endif %}
 </div>
 
 

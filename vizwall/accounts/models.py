@@ -38,7 +38,6 @@ class UserProfile(models.Model):
   staff_faculty_position = models.CharField(max_length=500, blank=True, null=True)
   formal_name = models.CharField(max_length=50, choices=NAME_FORMALITIES_PREFIX, default='none')
   picture = models.ImageField(upload_to='accounts/', default='accounts/default_profile.jpg', storage=upload_storage)
-  #picture_thumb = ImageSpec([resize.Fit(width=80, height=80, upscale=True)], image_field='picture', format='JPEG', options={'quality': 85}, pre_cache=True, cache_to=ACCOUNTS_UPLOAD_ROOT + 'accounts', storage=upload_storage, autoconvert=True)
   picture_thumb = models.ImageField(upload_to='accounts/', default='accounts/default_profile_thumb.jpg', storage=upload_storage)
   is_leadership_team = models.BooleanField(default=False)
   is_vizlab_staff = models.BooleanField(default=False)

@@ -3,7 +3,6 @@ from django.forms.widgets import *
 from django.forms.extras.widgets import *
 from vizwall.accounts.models import STAFF_TITLE_CHOICES, NAME_FORMALITIES_PREFIX, UserProfile
 from django.contrib.auth.models import User
-from vizwall.utils import handle_uploaded_image
 import datetime
 
 class UserFormAdmin(Form):

@@ -35,10 +35,12 @@ def index(request):
             'inact_user_count': numInactive},
           context_instance=RequestContext(request))
 
+@staff_member_required
 def view(request, user_id):
   user = get_object_or_404(User, pk=user_id)
   return render_to_response('accounts/customadmin/view.html', {'u': user}, context_instance=RequestContext(request))
 
+@staff_member_required
 def createUser(request, redirectURL='/admin/accounts/'):
   if request.method == 'POST':
     form = UserFormAdmin(request.POST, request.FILES)
@@ -59,6 +61,7 @@ def createUser(request, redirectURL='/admin/accounts/'):
     form = UserFormAdmin()
   return render_to_response('accounts/customadmin/create.html', {'form': form}, context_instance=RequestContext(request))
 
+@staff_member_required
 def editUser(request, user_id, redirectURL='/admin/accounts/'):
   user = get_object_or_404(User, pk=user_id)
   userprofile = user.get_profile()
@@ -101,6 +104,7 @@ def editUser(request, user_id, redirectURL='/admin/accounts/'):
   form = UserFormAdmin(data)
   return render_to_response('accounts/customadmin/edit.html', {'form': form, 'user_id': user_id, 'redirectURL': redirectURL}, context_instance=RequestContext(request))
 
+@staff_member_required
 def activateUser(request, user_id, redirectURL='/admin/accounts/'):
   user = get_object_or_404(User, pk=user_id)
   user.is_active = True
@@ -113,6 +117,7 @@ def activateUser(request, user_id, redirectURL='/admin/accounts/'):
   mail_send([user.email], password, 'mail/password_reset')
   return HttpResponseRedirect(redirectURL)
 
+@staff_member_required
 def deactivateUser(request, user_id, redirectURL='/admin/accounts/'):
   user = get_object_or_404(User, pk=user_id)
   if request.method == 'POST':
@@ -127,6 +132,7 @@ def deactivateUser(request, user_id, redirectURL='/admin/accounts/'):
     return HttpResponseRedirect(redirectURL)
   return render_to_response('accounts/customadmin/confirm.html', {'mode': 'deactivate', 'user_id': user_id, 'user': user}, context_instance=RequestContext(request))
 
+@staff_member_required
 def deleteUser(request, user_id, redirectURL='/admin/accounts/'):
   user = get_object_or_404(User, pk=user_id)
   if request.method == 'POST':

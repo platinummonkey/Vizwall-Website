@@ -114,6 +114,17 @@ class Event(models.Model):
     except:
       return None
 
+  def get_cs_components(self):
+    comp = []
+    if self.event_component_vizwall: comp.append('VizWall')
+    if self.event_component_3dtv: comp.append('3D TV')
+    if self.event_component_omni: comp.append('Omni')
+    if self.event_component_hd2: comp.append('HD2')
+    if self.event_component_smart: comp.append('Smartboard')
+    if comp:
+      return ', '.join(comp)
+    return None
+
   def assign_proctors_byID(self, proctorList):
     ''' Clears old proctors then assigns new proctors based on [User.pk] '''
     self.event_assigned_proctors.clear()
@@ -169,19 +180,6 @@ class Event(models.Model):
       if p.user not in proctors:
         unassigned.append(p.user)
     return unassigned
-
-  def send_scheduler_email(self):
-    schedulers = UserProfile.objects.all().filter(is_scheduler=True).filter(force_no_emails=False)
-    subject = 'New VizLab Request %s %s' % (self.event_title, self.event_date)
-    message='VizLab Scheduler,\n  There is a new event requested. Please review the request: <a href="http://vizlab.utsa.edu/admin/events/edit/%s/">http://vizlab.utsa.edu/admin/events/edit/%s/</a>\n\n%s\n%s\n%s\n\n --Automated Message' % (self.pk, self.pk, self.event_title, self.event_date, self.event_details)
-    mass_email(schedulers, subject, message)
-
-  def send_proctor_email(self):
-    #proctors =
-    pass 
-
-  def proctor_reminder(self):
-    pass
 
   def tuple2dict(self, choices):
     d = {}

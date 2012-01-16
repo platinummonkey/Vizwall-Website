@@ -18,15 +18,28 @@ def mail_send(recipients, event, templateBase, calendar=False, calendarCancel=Fa
   msg.attach_alternative(html_content, "text/html")
   if calendar:
     cal = iCalendar()
-    cal.add('method').value = 'PUBLISH' if not calendarCancel else 'CANCEL'
-    vevent = cal.add('vevent')
-    vevent.add('dtstart').value = event.event_date if not calendarCancel else 'CANCELLED'
-    vevent.add('dtend').value = event.get_end_date() if not calendarCancel else 'CANCELLED'
-    vevent.add('summary').value = event.event_title if not calendarCancel else 'CANCELLED'
-    vevent.add('description').value = event.event_title if not calendarCancel else 'CANCELLED'
-    calendarCancel: vevent.add('status').value = 'ACTIVE' if not calendarCancel else 'CANCELLED'
-    vevent.add('uid').value = event.pk
-    vevent.add('dtstamp').value = datetime.datetime.now() if not calendarCancel else 'CANCELLED'
+    if not calendarCancel:
+      cal.add('method').value = 'PUBLISH'
+      vevent = cal.add('vevent')
+      vevent.add('dtstart').value = event.event_date
+      vevent.add('dtend').value = event.get_end_date()
+      vevent.add('summary').value = event.event_title
+      vevent.add('description').value = event.event_title
+      vevent.add('status').value = 'ACTIVE'
+      vevent.add('uid').value = event.pk
+      vevent.add('dtstamp').value = datetime.datetime.now()
+
+    else:
+      cal.add('method').value = 'CANCEL'
+      vevent = cal.add('vevent')
+      vevent.add('dtstart').value = 'CANCELLED'
+      vevent.add('dtend').value = 'CANCELLED'
+      vevent.add('summary').value = 'CANCELLED'
+      vevent.add('description').value = 'CANCELLED'
+      vevent.add('status').value = 'CANCELLED'
+      vevent.add('uid').value = event.pk
+      vevent.add('dtstamp').value = 'CANCELLED'
+
     icalstream = cal.serialize()
     part = MIMEText(icalstream,'calendar')
     part.add_header('Filename','event.ics')
