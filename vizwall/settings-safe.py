@@ -5,14 +5,13 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
-    ('Cody Lee', 'platinummonkey@archlinux.us'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -44,14 +43,28 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
+# force everything to write to disk
+#FILE_UPLOAD_MAX_MEMORY_SIZE = 0 # force tmp files
+#FILE_UPLOAD_TEMP_DIR = '/tmp'
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
+#MEDIA_ROOT = '/vizwall/htdocs/media/'
 MEDIA_ROOT = ''
+#UPLOAD_PREPEND_PATH = 'uploads/'
+UPLOAD_ROOT = '/vizwall/htdocs/media/uploads/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+#MEDIA_URL = 'http://vizwall.platinummonkey.com/media/'
+MEDIA_URL = '/media/uploads/'
+
+import urlparse
+ACCOUNTS_UPLOAD_ROOT = UPLOAD_ROOT + 'accounts/'
+ACCOUNTS_UPLOAD_URL = urlparse.urljoin(MEDIA_URL, 'accounts/')
+NEWS_UPLOAD_ROOT = UPLOAD_ROOT + 'news/'
+NEWS_UPLOAD_URL = urlparse.urljoin(MEDIA_URL, 'accounts/')
 
 # user profiles
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
@@ -65,7 +78,7 @@ ADMIN_MEDIA_PREFIX = '/adminmedia/'
 LOGIN_REDIRECT_URL = '/admin/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = ''
+SECRET_KEY = 'ugwff&_0+na6o^4o1dnbrey$fgtd)txx0ylzxu+udls^kmc&8j'
 
 #Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -114,7 +127,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 
-# django-filter is used and source has been modified!
+
+# django-filter is used and source code is modified for this site
 # django-pagination is also used
 
 INSTALLED_APPS = (
@@ -127,8 +141,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # pagination
     'pagination',
-    # reporting
-    #'reportengine',
+    # image formatting
+    'imagekit',
     # custom feature
     'vizwall.accounts', # user profiles
     'vizwall.news',
