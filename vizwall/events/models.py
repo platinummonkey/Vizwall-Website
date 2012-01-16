@@ -156,8 +156,8 @@ class Event(models.Model):
     proctors = []
     if ps:
       for p in ps:
-        if not p.user.profile.force_no_emails:
-          proctors.append(p.user)
+        if not p.profile.force_no_emails:
+          proctors.append(p)
       return proctors
     return None
 

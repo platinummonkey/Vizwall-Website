@@ -1,4 +1,4 @@
-{{ event.event_contact_name }},
+Proctor,
 This assignemnt has been removed:
 {{ event.event_title|title }}
 {{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}

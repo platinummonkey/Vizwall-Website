@@ -1,4 +1,4 @@
-{{ user.profile.get_formal_name }},
+Proctor,
 Reminder of your assigned event: http://vizlab.utsa.edu/admin/events/view/{{ event.pk }}/
 
 {{ event.event_title|title }}

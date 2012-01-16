@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-<p>{{ user.profile.get_formal_name }},</p>
+<p>Proctor,</p>
 <p>Reminder of your assigned event: <a href="http://vizlab.utsa.edu/admin/events/view/{{ event.pk }}/">http://vizlab.utsa.edu/admin/events/view/{{ event.pk }}/</a></p>
 <p><strong>{{ event.event_title|title }}</strong></p>
 <p>{{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}</p>
