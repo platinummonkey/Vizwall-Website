@@ -140,6 +140,16 @@ class Event(models.Model):
         continue
     return assignedList
 
+  def get_assigned_proctors_can_email(self):
+    ps = self.get_assigned_proctors()
+    proctors = []
+    if ps:
+      for p in ps:
+        if not p.user.profile.force_no_emails:
+          proctors.append(p.user)
+      return proctors
+    return None
+
   def get_assigned_proctors(self):
     ''' Get assigned proctors: [User] '''
     ps = self.proctor_set.all()

@@ -1,0 +1,12 @@
+{{ event.event_contact_name }},
+Your request has been removed. For more information please contact the VizLab team.
+
+{{ event.event_title|title }}
+{{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}
+
+{{ event.event_details }}
+
+
+-VizLab Team
+
+--This is an automated message, replying to this message will be ignored.

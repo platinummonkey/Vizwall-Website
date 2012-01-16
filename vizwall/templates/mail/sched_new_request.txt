@@ -1,0 +1,10 @@
+VizLab Scheduler,
+There is a new event requested. Please review the request: http://vizlab.utsa.edu/admin/events/edit/{{ event.pk }}/
+
+{{ event.event_title|title }}
+{{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}
+
+{{ event.event_details }}
+
+
+--Automated Message

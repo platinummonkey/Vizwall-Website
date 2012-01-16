@@ -116,7 +116,11 @@ def declineEvent(request, event_id, redirectURL='/admin/events/requests/'):
   event = get_object_or_404(Event, pk=event_id)
   event.event_is_declined = True
   event.event_is_published = False
-  event.proctors.clear()
+  ps = event.get_assigned_proctors()
+  proctors = [u.email for u in ps] if proctors else None
+  if proctors: mail_send(proctors, event, 'mail/proctor_event_removed', calendar=True, calendarCancel=True)
+  event.event_assigned_proctors.clear()
+   mail_send([event.event_contact_email], event, 'mail/requester_deny_request')
   event.save()
   return HttpResponseRedirect(redirectURL)
 
@@ -153,12 +157,13 @@ def newEvent(request, redirectURL='/admin/events/requests/'):
         event.save() # have to save the event before assigning the proctors in order for the manytomany relationship to be created.
         assignedProctors = event.assign_proctors_byID(fd['proctors'])
         event.save() # save again to make the final call
+        ps = event.get_assigned_proctors_can_email()
+        proctors = [u.email for u in ps] if ps else []
+        if proctors: mail_send(proctors, event, 'mail/proctor_new_assignment', calendar=True)
         # don't send mail to schedulers! they already know!
         # send mail confirmation to requester
         recipients = [event.event_contact_email]
-        subject=REQUESTER_NEW_REQUEST[0] % (event.event_title, event.event_date)
-        message=REQUESTER_NEW_REQUEST[1] % (event.event_contact_name, event.event_title, event.event_date, event.event_details)
-        mass_email(subject, message, recipients = recipients)
+        mail_send(recipients, event, 'mail/requester_confirm_request', calendar=True)
       except:
         # Something bad happened, apologize and tell them to contact us.
         return render_to_response('events/customadmin/eventrequest.html', {'form': form}, context_instance=RequestContext(request))
@@ -199,8 +204,25 @@ def editEvent(request, event_id, redirectURL='/admin/events/'):
       event.event_is_declined=fd['event_is_declined']
       #event.event_assigned_proctors=fd['event_assigned_proctors']
       #event.save()
-      assignedProctors = event.assign_proctors_byID(fd['proctors'])
+      ps = event.get_assigned_proctors_can_email()
+      oldProctors = [u.email for u in ps] if ps else []
+      aps = event.assign_proctors_byID(fd['proctors'])
+      assignedProctors = [u.email for u in aps] if aps else []
       event.save()
+      proctorsRemoved = []
+      proctorsAdded = []
+      # send email to proctors being added that event is added
+      if assignedProctors:
+        for p in assignedProctors:
+          if p not in oldProctors:
+            proctorsAdded.append(p)
+      if proctorsAdded: mail_send(proctorsAdded, event, 'mail/proctor_new_assignment', calendar=True)
+      # send email to proctors being removed that event is cancelled
+      if oldProctors:
+        for p in oldProctors:
+          if p not in assignedProctors:
+            proctorsRemoved.append(p)
+      if proctorsRemoved: mail_send(proctorsRemoved, event, 'mail/proctor_event_removed', calendar=True, calendarCancel=False)
       return HttpResponseRedirect(redirectURL)
   else:
     form = EventFormAdmin(instance=event, event_id=event_id)
@@ -212,7 +234,12 @@ def deleteEvent(request, event_id, redirectURL='/admin/events/requests/'):
   event = get_object_or_404(Event, pk=event_id)
   if request.method == 'POST': # form submitted
     if request.POST['confirm'] == u'Yes':
-      event.proctors.clear()
+      ps = event.get_assigned_proctors_can_email()
+      proctors = [u.email for u in ps] if ps else []
+      if proctors: mail_send(proctors, event, 'mail/proctor_event_removed', calendar=True, calendarCancel=True)
+      event.event_assigned_proctors.clear()
+      recipients = [event.event_contact_email]
+      mail_send(recipients, event, 'mail/requester_removed_request')
       event.delete() # deletes! no backups!
     return HttpResponseRedirect(redirectURL)
   return render_to_response('events/customadmin/confirm.html', {'mode': 'delete', 'event_id': event_id, 'event': event}, context_instance=RequestContext(request))
@@ -225,7 +252,12 @@ def deactivateEvent(request, event_id, redirectURL='/admin/events/requests/'):
     if request.POST['confirm'] == u'Yes':
       event.is_published=False
       event.is_declined=False
-      event.proctors.clear()
+      ps = event.get_assigned_proctors_can_email()
+      proctors = [u.email for u in ps] if ps else []
+      if proctors: mail_send(proctors, event, 'mail/proctor_event_removed', calendar=True, calendarCancel=True)
+      event.event_assigned_proctors.clear()
+      recipients = [event.event_contact_email]
+      mail_send(recipients, event, 'mail/requester_removed_request')
       event.save()
     return HttpResponseRedirect(redirectURL)
   return render_to_response('events/customadmin/confirm.html', {'mode': 'deactivate', 'event_id': event_id, 'event': event}, context_instance=RequestContext(request))
@@ -237,6 +269,11 @@ def requestConfirm(request, event_id, redirectURL='/admin/events/requests/'):
   event = get_object_or_404(Event, pk=event_id)
   event.event_is_published = True
   event.event_is_declined = False
+  ps = event.get_assigned_proctors_can_email()
+  proctors = [u.email for u in ps] if ps else []
+  if proctors: mail_send(proctors, event, 'mail/proctor_event_removed', calendar=True)
+  recipients = [event.event_contact_email]
+  mail_send(recipients, event, 'mail/requester_confirm_request')
   event.save()
   return HttpResponseRedirect(redirectURL)
 
@@ -250,7 +287,7 @@ def displaySingleEvent(request, event_id):
     event = Event.objects.get(pk=event_id)
   except Event.DoesNotExist:
     raise Http404
-  return render_to_response('events/event_details.html', {'event': event})
+  return render_to_response('events/event_details.html', {'event': event}, context_instance=RequestContext(request))
 
 def displayDaysEvents(request, y, m, d):
   ''' Displays a single day's events '''
@@ -263,7 +300,7 @@ def displayDaysEvents(request, y, m, d):
           events = formatEvents(eventQuery)
   except:
     raise Http404
-  return render_to_response('events/event_day_list.html', {'events': events})
+  return render_to_response('events/event_day_list.html', {'events': events}, context_instance=RequestContext(request))
 
 def getUpcomingEvents(maxEvents):
   ''' Gets the upcoming events and returns a total of MaxEvents in a dict'''
@@ -350,9 +387,11 @@ def reportsIndex(request, download=None):
                      'Contact Exec','Contact Phone','Contact Email','Proctors',
                      'Event Details'])
     for e in f.qs:
+      ps = e.get_assigned_proctors()
       proctors = []
-      for u in e.event_assigned_proctors.all():
-        proctors.append(str(u.get_full_name()))
+      if ps:
+        for u in ps:
+          proctors.append(u.get_full_name())
       if proctors:
         proctors = ';'.join(proctors)
       else:

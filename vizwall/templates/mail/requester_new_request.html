@@ -1,0 +1,14 @@
+{% extends "mail/base_mail.html" %}
+
+{% block title %}New Request: {{ event.event_title|title|truncatewords:5 }} {{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}
+{% endblock %}
+
+{% block content %}
+<p>{{ event.event_contact_name }},</p>
+<p>Thank you for your request. Please be patient while your event is reviewed prior to approval.</p>
+<p><strong>{{ event.event_title|title }}</strong></p>
+<p>{{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}</p>
+<p>{{ event.event_details }}</p>
+<br>
+<p>-VizLab Team<br><br>--This is an automated message, replying to this message will be ignored.</p>
+{% endblock %}

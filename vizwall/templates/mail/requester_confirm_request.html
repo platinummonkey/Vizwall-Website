@@ -1,0 +1,14 @@
+{% extends "mail/base_mail.html" %}
+
+{% block title %}Request Confirmed: {{ event.event_title|title|truncatewords:5 }} {{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}
+{% endblock %}
+
+{% block content %}
+<p>{{ event.event_contact_name }},</p>
+<p>Your request has been approved: <a href="http://vizlab.utsa.edu/events/event/{{ event.pk }}/">http://vizlab.utsa.edu/events/event/{{ event.pk }}/</a></p>
+<p><strong>{{ event.event_title|title }}</strong></p>
+<p>{{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}</p>
+<p>{{ event.event_details }}</p>
+<br>
+<p>-VizLab Team<br><br>--This is an automated message, replying to this message will be ignored.</p>
+{% endblock %}

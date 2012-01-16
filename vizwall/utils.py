@@ -75,15 +75,3 @@ def crop_resize_image(i, dst_dim):
   imageContentFile = ContentFile(newimageImage.tostring('jpeg', newimageImage.mode))
   return imageContentFile
 
-### Email ###
-from django.core.mail import send_mail
-sender = 'no-reply@vizlab.utsa.edu'
-
-def mass_email(subject, message, users=None, recipients=None):
-  if users:
-    recipients = []
-    for u in users:
-      recipients.append(u.email)
-  if recipients:
-    send_mail(subject, message, sender, recipients)
-### /Email ###

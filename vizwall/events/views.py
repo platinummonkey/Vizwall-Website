@@ -8,8 +8,7 @@ from django.shortcuts import render_to_response
 
 # Email actions
 from vizwall.accounts.models import UserProfile
-from vizwall.utils import mass_email
-from vizwall.settings import REQUESTER_NEW_REQUEST, SCHED_NEW_REQUEST
+from vizwall.mailer import mail_send
 
 # Events stuff
 from vizwall.events.models import Event
@@ -83,14 +82,10 @@ def requestEvent(request):
       event.save()
       # send mail to schedulers about new event
       schedulers = [u.user.email for u in UserProfile.objects.all().filter(is_scheduler=True,force_no_emails=False)]
-      subject=SCHED_NEW_REQUEST[0] % (event.event_title, event.event_date)
-      message=SCHED_NEW_REQUEST[1] % (event.pk, event.pk, event.event_title, event.event_date, event.event_details)
-      mass_email(subject, message, recipients=schedulers)
+      mail_send(schedulers, event, 'mail/sched_new_request')
       # send mail confirmation to requester
       recipients = [event.event_contact_email]
-      subject=REQUESTER_NEW_REQUEST[0] % (event.event_title, event.event_date)
-      message=REQUESTER_NEW_REQUEST[1] % (event.event_contact_name, event.event_title, event.event_date, event.event_details)
-      mass_email(subject, message, recipients=recipients)
+      mail_send(recipients, event, 'mail/requester_new_request')
     except:
       # Something bad happened, apologize and tell them to contact us.
       return render_to_response('events/eventrequest.html', {'form': form}, context_instance=RequestContext(request))

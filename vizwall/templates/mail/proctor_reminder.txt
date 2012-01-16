@@ -1,0 +1,9 @@
+{{ user.profile.get_formal_name }},
+Reminder of your assigned event: http://vizlab.utsa.edu/admin/events/view/{{ event.pk }}/
+
+{{ event.event_title|title }}
+{{ event.event_date|date:"n/j/y h:i A" }} - {{ event.get_end_date|date:"h:i A" }}
+
+{{ event.event_details }}
+
+--Automated Message

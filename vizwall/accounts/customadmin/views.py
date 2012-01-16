@@ -11,9 +11,7 @@ from django.shortcuts import get_object_or_404
 from vizwall.utils import handle_uploaded_picture
 
 # Email actions
-from django.core.mail import send_mail
-# debug
-DEBUGSENDMAIL = True
+from vizwall.mailer import mail_send
 
 # User and profile
 from django.contrib.auth.models import User
@@ -40,12 +38,6 @@ def index(request):
 def view(request, user_id):
   user = get_object_or_404(User, pk=user_id)
   return render_to_response('accounts/customadmin/view.html', {'u': user}, context_instance=RequestContext(request))
-  
-
-def emailPassword(email, password):
-  subject = 'Password Reset'
-  message = 'Your password has been reset: %s\n\nPlease login now and change this: http://vislab.utsa.edu/login/' % password
-  send_mail(subject, message, 'no-reply@vislab.utsa.edu', email)
 
 def createUser(request, redirectURL='/admin/accounts/'):
   if request.method == 'POST':
@@ -60,7 +52,8 @@ def createUser(request, redirectURL='/admin/accounts/'):
       userprofile.picture_thumb.save(filename[1], content[1])
       userprofile.save()
       user.save()
-      emailPassword(user.email, password)
+      #emailPassword(user.email, password)
+      mail_send([user.email], password, 'mail/password_reset')
       return HttpResponseRedirect(redirectURL)
   else:
     form = UserFormAdmin()
@@ -76,7 +69,7 @@ def editUser(request, user_id, redirectURL='/admin/accounts/'):
       if form.cleaned_data['reset_password'] == True and form.cleaned_data['is_active'] == True:
         password = form.do_reset_password()
         email = form.cleaned_data['email']
-        emailPassword(email, password)
+        mail_send([email], password, 'mail/password_reset')
       (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
       userprofile.picture.delete()
       userprofile.picture.save(filename[0], content[0])
@@ -117,7 +110,7 @@ def activateUser(request, user_id, redirectURL='/admin/accounts/'):
   userprofile.last_update_profile = datetime.datetime.now()
   userprofile.save()
   user.save()
-  emailPassword(user.email, password)
+  mail_send([user.email], password, 'mail/password_reset')
   return HttpResponseRedirect(redirectURL)
 
 def deactivateUser(request, user_id, redirectURL='/admin/accounts/'):
