@@ -141,8 +141,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # pagination
     'pagination',
-    # image formatting
-    'imagekit',
     # custom feature
     'vizwall.accounts', # user profiles
     'vizwall.news',
