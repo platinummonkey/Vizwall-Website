@@ -4,10 +4,12 @@ from django.forms.extras.widgets import *
 from vizwall.events.models import Event, COMPONENT_CHOICES, dTimeFieldInputs
 import datetime
 from vizwall.accounts.models import UserProfile
+from captcha.fields import CaptchaField
 
 class EventForm(ModelForm):
   '''Event form, customized to show normal Anonymous view'''
   event_date = DateTimeField(required=True, initial=None, input_formats=dTimeFieldInputs, help_text='Please use the date selector and check the calendar for available times!')
+  captcha = CaptchaField()
   class Meta:
     model = Event
     #fields = ()
@@ -105,7 +107,7 @@ class DynamicMultipleChoiceField(MultipleChoiceField):
 class EventFormAdmin(EventForm):
   class Meta:
     model=Event
-    exclude=('event_pub_date', 'event_req_date', 'event_last_modified', 'event_assigned_proctors')
+    exclude=('event_pub_date', 'event_req_date', 'event_last_modified', 'event_assigned_proctors', 'captcha')
     widgets = {
         'event_detail': Textarea(attrs={'cols':35, 'rows':5}),
         'event_components_vizwall': CheckboxInput(),
