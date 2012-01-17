@@ -39,50 +39,6 @@ def adminhome(request):
           'pendingevents': pendingEvents},
           context_instance=RequestContext(request))
 
-# TEMPORARY
-
-def eventrequest(request={}):
-  ''' Event Request'''
-  return render_to_response('eventrequest.html', {}, context_instance=RequestContext(request)) 
-
-def eventdetail(request={}):
-  ''' Event Detail'''
-  return render_to_response('eventdetail.html', {}, context_instance=RequestContext(request)) 
-
-def adminmenu(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-menu.html', {}, context_instance=RequestContext(request)) 
-
-def adminaccounts(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-accounts.html', {}, context_instance=RequestContext(request)) 
-
-def adminaccountsdetail(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-accounts-detail.html', {}, context_instance=RequestContext(request)) 
-
-def adminnews(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-news.html', {}, context_instance=RequestContext(request)) 
-  
-def adminnewsdetail(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-news-detail.html', {}, context_instance=RequestContext(request)) 
-
-def adminpages(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-pages.html', {}, context_instance=RequestContext(request)) 
-  
-def adminpagesdetail(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-pages-detail.html', {}, context_instance=RequestContext(request)) 
-
-def admineventrequest(request={}):
-  ''' Event Listing'''
-  return render_to_response('admin-event-request.html', {}, context_instance=RequestContext(request)) 
-
-
-
 
 def home(request={}, page=0):
   ''' Home'''
@@ -97,10 +53,19 @@ def news(request={}, page=0):
 def login(request={}, page=0):
   ''' Login page '''
   return render_to_response('login.html', {}, context_instance=RequestContext(request)) 
-  
+
+
+from vizwall.accounts.forms import ContactForm 
 def contact(request={}):
   ''' Contact'''
-  return render_to_response('contact.html', {}, context_instance=RequestContext(request))
+  if request.POST:
+    form = ContactForm(request.POST)
+    if form.is_valid():
+      cs = form.save() # sends emails
+      return render_to_response('contact_thankyou.html', {'submission': cs}, context_instance=RequestContext(request))
+  else:
+    form = ContactForm()
+  return render_to_response('contact.html', {'form': form}, context_instance=RequestContext(request))
 
 def galvizwall(request={}):
   ''' VizWall Gallery'''

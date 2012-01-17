@@ -1,0 +1,9 @@
+Sender Information:
+Name: {{ event.name|title }}
+Email: {{ event.email }}
+Phone: {{ event.phone }}
+
+{{ event.subject|title }}
+{{ event.message }}
+
+--Automated Message

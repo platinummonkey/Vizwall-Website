@@ -31,53 +31,80 @@ San Antonio, Texas 78249<br>
 
 
 
-<form name="contactform" method="post" action="send_form_email.php">
+<form name="contactform" method="post" action="/contact/">
 <div id="contactform" class=formsyeah>
 <table width="100%">
-</tr>
 <tr>
  <td valign="top">
-  <label for="first_name">First Name *</label>
+  <label for="id_name">Name *</label>
  </td>
  <td valign="top">
-  <input  type="text" name="first_name" maxlength="50" size="30">
+ {{ form.name }}
+ <span class=tip>{{ form.name.help_text }} {{ form.name.errors }}</span>
  </td>
 </tr>
 
 <tr>
  <td valign="top">
-  <label for="last_name">Last Name *</label>
+  <label for="id_phone">Phone *</label>
  </td>
  <td valign="top">
-  <input  type="text" name="last_name" maxlength="50" size="30">
+ {{ form.phone }}
+ <span class=tip>{{ form.phone.help_text }} {{ form.phone.errors }}</span>
  </td>
 </tr>
-<tr>
- <td valign="top">
-  <label for="email">Email Address *</label>
- </td>
- <td valign="top">
-  <input  type="text" name="email" maxlength="80" size="30">
- </td>
 
-</tr>
 <tr>
  <td valign="top">
-  <label for="telephone">Telephone Number</label>
+  <label for="id_email">Email Address *</label>
  </td>
  <td valign="top">
-  <input  type="text" name="telephone" maxlength="30" size="30">
+ {{ form.email }}
+ <span class=tip>{{ form.email.help_text }} {{ form.email.errors }}</span>
  </td>
 </tr>
-<tr>
- <td valign="top">
-  <label for="comments">Comments *</label>
- </td>
- <td valign="top">
-  <textarea  name="comments" maxlength="1000" cols="25" rows="6"></textarea>
- </td>
 
+<tr>
+ <td valign="top">
+  <label for="id_subject">Subject *</label>
+ </td>
+ <td valign="top">
+ {{ form.subject }}
+ <span class=tip>{{ form.subject.help_text }} {{ form.subject.errors }}</span>
+ </td>
 </tr>
+
+<tr>
+ <td valign="top">
+  <label for="id_message">Comments *</label>
+ </td>
+ <td valign="top">
+ {{ form.message }}
+ <span class=tip>{{ form.message.help_text }} {{ form.message.errors }}</span>
+ </td>
+</tr>
+
+<tr>
+ <td valign="top">
+  <label for="id_cc_myself">Send me a copy</label>
+ </td>
+ <td valign="top">
+ {{ form.cc_myself }}
+ <span class=tip>{{ form.cc_myself.help_text }} {{ form.cc_myself.errors }}</span>
+ </td>
+</tr>
+
+
+<tr>
+ <td valign="top">
+  <label for="id_captcha">Confirm you are human *</label>
+ </td>
+ <td valign="top">
+ {{ form.captcha }}
+ <span class=tip>{{ form.captcha.help_text }} {{ form.captcha.errors }}</span>
+ </td>
+</tr>
+
 <tr>
  <td colspan="2" style="text-align:center">
   <input type="submit" value="Submit">

@@ -41,22 +41,7 @@ urlpatterns = patterns('',
     (r'^gallery/vizwall/', 'vizwall.views.galvizwall'),
     (r'^gallery/haptic/', 'vizwall.views.galhaptic'),
     
-    
-    
-    #TEMPORARY
-    #(r'^static/', include('vizwall.planarpages.urls')),   
- 
-    (r'^eventrequest/', 'vizwall.views.eventrequest'),
-    (r'^eventdetail/', 'vizwall.views.eventdetail'),
-    (r'^adminmenu/', 'vizwall.views.adminmenu'),
-    (r'^admin-accounts/', 'vizwall.views.adminaccounts'),
-    (r'^admin-accounts-detail/', 'vizwall.views.adminaccountsdetail'),
-    (r'^admin-news/', 'vizwall.views.adminnews'),
-    (r'^admin-news-detail/', 'vizwall.views.adminnewsdetail'),
-    (r'^admin-pages/', 'vizwall.views.adminpages'),
-    (r'^admin-pages-detail/', 'vizwall.views.adminpagesdetail'),
-    (r'^admin-event-request/', 'vizwall.views.admineventrequest'),
-
+    (r'^captcha/', include('captcha.urls')),
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include('vizwall.customadmin_urls')),

@@ -86,3 +86,31 @@ class UserFormAdmin(Form):
     user.set_password(password)
     user.save()
     return password
+
+# Contact Form
+from captcha.fields import CaptchaField
+from django.contrib.localflavor.us.forms import USPhoneNumberField
+from vizwall.settings import CONTACT_FORM_EMAIL
+class ContactSubmission():
+  def __init__(self, subject, message, name, phone, email):
+    self.subject = subject
+    self.message = message
+    self.name = name
+    self.phone = phone
+    self.email = email
+
+class ContactForm(Form):
+  subject = CharField(max_length=100)
+  message = CharField(max_length=2000, widget=Textarea(attrs={'cols':35, 'rows': 5}))
+  name = CharField(max_length=200)
+  phone = USPhoneNumberField(help_text='123-456-7890 only please!')
+  email = EmailField()
+  cc_myself = BooleanField(required=False)
+  captcha = CaptchaField()
+
+  def save(self):
+    cs = ContactSubmission(self.subject, self.message, self.name, self.phone, self.email)
+    mail_send([CONTACT_FORM_EMAIL], cs, 'mail/contact_form')
+    if self.cc_myself:
+      mail_send([self.email], cs, 'mail/contact_form')
+    return cs
