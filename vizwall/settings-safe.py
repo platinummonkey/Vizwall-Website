@@ -89,6 +89,15 @@ EMAIL_SUBJECT_PREFIX = 'Vizwall test site - '
 #EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 
+### Captcha ###
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+CAPTCHA_TIMEOUT = 10
+CAPTCHA_LENGTH = 7
+CAPTCHA_LETTER_ROTATION = (-45,45)
+CAPTCHA_OUTPUT_FORMAT = u'%(image)s %(hidden_field)s <br> %(text_field)s'
+CONTACT_FORM_EMAIL = 'ben.campos@utsa.edu'
+### End Captcha ###
+
 
 APPEND_SLASH = True
 
@@ -141,7 +150,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # pagination
     'pagination',
-    # custom feature
+    # captcha
+    'captcha',
+    # custom features
     'vizwall.accounts', # user profiles
     'vizwall.news',
     'vizwall.events',
