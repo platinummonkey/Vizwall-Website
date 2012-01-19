@@ -32,6 +32,25 @@ def index(request):
     pagenum = request.GET['page']
   return render_to_response('news/customadmin/index.html',{'news': news, 'pagenum': pagenum},context_instance=RequestContext(request))
 
+def newNews(request):
+  ''' Create news article '''
+  if request.method == 'POST': # form submitted
+    form = NewsFormAdmin(request.POST, request.FILES)
+    if form.is_valid():
+      fd = form.cleaned_data
+      news = News(title=fd['title'], article=fd['article'],
+              outside_link=fd['outside_link'])
+      (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+      news.save()
+      news.image.save(filename[0], content[0])
+      news.image_thumb.save(filename[1], content[1])
+      news.is_published=True
+      news.save()
+      return HttpResponseRedirect('/admin/news/')
+  else: # form not submitted, create populated form for editing
+      form = NewsFormAdmin()
+  return render_to_response('news/customadmin/create.html', {'form': form}, context_instance=RequestContext(request))
+
 @staff_member_required
 def editNews(request, news_id):
   ''' Edit a news article '''
@@ -44,7 +63,7 @@ def editNews(request, news_id):
         news.pub_date = datetime.datetime.now()
         news.title = form.cleaned_data['title']
         news.article = form.cleaned_data['article']
-        (filename, content) = handle_uploaded_picture(request.FILES['image'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+        (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
         news.image.delete()
         news.image.save(filename[0], content[0])
         news.image_thumb.delete()

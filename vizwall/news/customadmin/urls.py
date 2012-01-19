@@ -5,6 +5,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('vizwall.news.customadmin.views',
 
     (r'^$', 'index'),
+    (r'^create/$', 'newNews'),
 
     # Edit News
     (r'^edit/(?P<news_id>\d+)/$', 'editNews'),

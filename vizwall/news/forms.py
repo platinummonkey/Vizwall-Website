@@ -7,10 +7,11 @@ import datetime
 
 class NewsFormAdmin(ModelForm):
   '''News form, for admin view only'''
+  picture = ImageField(required=False)
   class Meta:
     model = News
     #fields = ()
-    exclude=('pub_date', 'image_formatted', 'image_thumb')
+    exclude=('pub_date', 'image', 'image_thumb')
     widgets = {
         'article': Textarea(attrs={'cols':50, 'rows': 10}),
         'is_published': CheckboxInput(),
