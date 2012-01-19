@@ -89,8 +89,11 @@ def deleteNews(request, news_id):
     news = News.objects.get(pk=news_id)
     if request.method == 'POST': # form submitted
       if request.POST['confirm'] == u'Yes':
-        news.picture.delete()
-        news.picture_thumb.delete()
+        if news.image:
+          if not news.image.url.endswith('default_picture.jpg'):
+            # we don't want to be able to delete the default picture
+            news.image.delete()
+            news.image_thumb.delete()
         news.delete() # deletes! no backups!
         if request.GET and request.GET.has_key('page'):
           pagenum = request.GET['page']
@@ -99,7 +102,7 @@ def deleteNews(request, news_id):
   except News.DoesNotExist:
     raise Http404
   except:
-    raise Http404
+    return HttpResponseRedirect('/admin/news/')
   return render_to_response('news/customadmin/confirm.html', {'news_id': news_id, 'news': news}, context_instance=RequestContext(request))
   
 
