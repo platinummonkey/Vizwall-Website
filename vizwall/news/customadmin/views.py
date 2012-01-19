@@ -40,10 +40,11 @@ def newNews(request):
       fd = form.cleaned_data
       news = News(title=fd['title'], article=fd['article'],
               outside_link=fd['outside_link'])
-      (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
       news.save()
-      news.image.save(filename[0], content[0])
-      news.image_thumb.save(filename[1], content[1])
+      if request.FILES.get('picture', False):
+        (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+        news.image.save(filename[0], content[0])
+        news.image_thumb.save(filename[1], content[1])
       news.is_published=True
       news.save()
       return HttpResponseRedirect('/admin/news/')
@@ -63,11 +64,12 @@ def editNews(request, news_id):
         news.pub_date = datetime.datetime.now()
         news.title = form.cleaned_data['title']
         news.article = form.cleaned_data['article']
-        (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
-        news.image.delete()
-        news.image.save(filename[0], content[0])
-        news.image_thumb.delete()
-        news.image_thumb.save(filename[1], content[1])
+        if request.FILES.get('picture', False):
+          (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+          news.image.delete()
+          news.image.save(filename[0], content[0])
+          news.image_thumb.delete()
+          news.image_thumb.save(filename[1], content[1])
         news.outside_link = form.cleaned_data['outside_link'] if form.cleaned_data['outside_link'] else None
         news.is_published = True if form.cleaned_data['is_published'] else False
         news.save()

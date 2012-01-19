@@ -46,13 +46,14 @@ def createUser(request, redirectURL='/admin/accounts/'):
     form = UserFormAdmin(request.POST, request.FILES)
     if form.is_valid():
       (user, password) = form.save()
-      (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
-      userprofile = user.profile
-      userprofile.picture.delete()
-      userprofile.picture.save(filename[0], content[0])
-      userprofile.picture_thumb.delete()
-      userprofile.picture_thumb.save(filename[1], content[1])
-      userprofile.save()
+      if request.FILES.get('picture', False):
+        (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+        userprofile = user.profile
+        userprofile.picture.delete()
+        userprofile.picture.save(filename[0], content[0])
+        userprofile.picture_thumb.delete()
+        userprofile.picture_thumb.save(filename[1], content[1])
+        userprofile.save()
       user.save()
       #emailPassword(user.email, password)
       mail_send([user.email], password, 'mail/password_reset')
@@ -73,11 +74,12 @@ def editUser(request, user_id, redirectURL='/admin/accounts/'):
         password = form.do_reset_password()
         email = form.cleaned_data['email']
         mail_send([email], password, 'mail/password_reset')
-      (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
-      userprofile.picture.delete()
-      userprofile.picture.save(filename[0], content[0])
-      userprofile.picture_thumb.delete()
-      userprofile.picture_thumb.save(filename[1], content[1])
+      if request.FILES.get('picture', False):
+        (filename, content) = handle_uploaded_picture(request.FILES['picture'], MAX_IMG_SIZE, THUMB_IMG_SIZE)
+        userprofile.picture.delete()
+        userprofile.picture.save(filename[0], content[0])
+        userprofile.picture_thumb.delete()
+        userprofile.picture_thumb.save(filename[1], content[1])
       userprofile.save()
       user.save()
       return HttpResponseRedirect(redirectURL)
