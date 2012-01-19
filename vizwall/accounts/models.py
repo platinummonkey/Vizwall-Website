@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.localflavor.us.models import PhoneNumberField
-from vizwall.settings import UPLOAD_ROOT, ACCOUNTS_UPLOAD_URL
+from vizwall.settings import UPLOAD_ROOT, ACCOUNTS_UPLOAD_URL, ACCOUNTS_UPLOAD_ROOT
 from vizwall.utils import CustomFileSystemStorage as CFSS
 
 #upload_storage = upload_storage = FileSystemStorage(location=ACCOUNTS_UPLOAD_ROOT, base_url=ACCOUNTS_UPLOAD_URL)
@@ -37,8 +37,8 @@ class UserProfile(models.Model):
   staff_position = models.IntegerField(choices=STAFF_TITLE_CHOICES, default=STAFF_TITLE_CHOICES[0][0])
   staff_faculty_position = models.CharField(max_length=500, blank=True, null=True)
   formal_name = models.CharField(max_length=50, choices=NAME_FORMALITIES_PREFIX, default='none')
-  picture = models.ImageField(upload_to='accounts/', default='accounts/default_profile.jpg', storage=upload_storage)
-  picture_thumb = models.ImageField(upload_to='accounts/', default='accounts/default_profile_thumb.jpg', storage=upload_storage)
+  picture = models.ImageField(upload_to='accounts/', default=ACCOUNTS_UPLOAD_ROOT+'accounts/default_profile.jpg', storage=upload_storage)
+  picture_thumb = models.ImageField(upload_to='accounts/', default=ACCOUNTS_UPLOAD_ROOT+'accounts/default_profile_thumb.jpg', storage=upload_storage)
   is_leadership_team = models.BooleanField(default=False)
   is_vizlab_staff = models.BooleanField(default=False)
   faculty_webpage = models.URLField(default='', blank=True)
