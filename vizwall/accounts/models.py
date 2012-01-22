@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.localflavor.us.models import PhoneNumberField
 from vizwall.settings import UPLOAD_ROOT, ACCOUNTS_UPLOAD_URL
 from vizwall.utils import CustomFileSystemStorage as CFSS
+import datetime
 
 #upload_storage = upload_storage = FileSystemStorage(location=ACCOUNTS_UPLOAD_ROOT, base_url=ACCOUNTS_UPLOAD_URL)
 upload_storage = upload_storage = CFSS(location=UPLOAD_ROOT, base_url=ACCOUNTS_UPLOAD_URL)
@@ -68,6 +69,15 @@ class UserProfile(models.Model):
 
   def get_assigned_events(self):
     return self.user.event_set.all()
+
+  def get_upcoming_assigned_events(self):
+    aeList = self.user.event_set.all()
+    now = datetime.datetime.now()
+    uaeList = []
+    for ae in aeList:
+      if ae.event_date >= now:
+        uaeList.append(ae)
+    return uaeList
   
   def tuple2dict(self, choices):
     d = {}

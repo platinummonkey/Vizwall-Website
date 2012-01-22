@@ -1,0 +1,50 @@
+{% extends "base-admin.html" %}
+{% load pagination_tags %}
+
+{% block title %}
+Assigned Events
+{% endblock %}
+
+{% block content %}
+
+
+<!--  START CONTENT -->
+
+<!--  LEFT SIDE -->
+<h1>ASSIGNED EVENTS</h1>
+<div class="textholder_wide">
+{% autopaginate assignedEvents 20 %}
+<center>{% paginate %}</center>
+<div class=event_list>
+<table cellpadding=0 cellspacing=0 width=100%>
+<tr class=el_title>
+{% if assignedEvents %}
+<td class=el_start><strong>Event Date</strong></td>
+<td><strong>Event Title</strong></td>
+<td class=el_end><strong>Components</strong></td>
+</tr>
+{% for e in assignedEvents %}
+<tr>
+<td class=el_start>{{ e.event_date|date:"n/j/y h:i A" }} - {{ e.get_end_date|date:"h:i A" }}</td>
+<td><a href="/events/detail/{{ e.pk }}/">{{ e.event_title|title|truncatewords:5 }}</a></td>
+<td class=el_end>{% if e.event_component_vizwall %}<img src="/media/site_images/vizwall_icon.png">{% endif %}
+{% if e.event_component_3dtv %}<img src="/media/site_images/3dtv_icon.png">{% endif %}
+{% if e.event_component_omni %}<img src="/media/site_images/omni_icon.png">{% endif %}
+{% if e.event_component_hd2 %}<img src="/media/site_images/hd2_icon.png">{% endif %}
+{% if e.event_component_smart %}<img src="/media/site_images/smart_icon.png">{% endif %}</td>
+</tr>
+{% endfor %}
+{% else %}
+<td class=el_start colspan=3>There are no assigned events</td></tr>
+{% endif %}
+</table>
+</div>
+<center>{% paginate %}</center>
+
+</div>
+
+<div class="clear"></div>
+
+<!--  END CONTENT -->
+
+{% endblock %}
