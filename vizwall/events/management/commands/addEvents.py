@@ -35,7 +35,7 @@ class Command(NoArgsCommand):
       if not saveit.lower() == 'y':
         self.stdout.write("== Not Saved! ==\n\n")
       else:
-        e = Event(title=event_title, event_duration=duration, event_date=edate, event_audience=audience, event_visitors=20, event_component_vizwall=True, event_component_3dtv=True, event_component_omni=True, event_component_hd2=True, event_component_smart=True, event_assistance=True, event_contact_name=c_name, event_contact_dept=c_dept, event_contact_exec=7, event_contact_phone=c_phone, event_contact_email=c_email, event_details=details, is_published=True)
+        e = Event(event_title=title, event_duration=duration, event_date=edate, event_audience=audience, event_visitors=20, event_component_vizwall=True, event_component_3dtv=True, event_component_omni=True, event_component_hd2=True, event_component_smart=True, event_assistance=True, event_contact_name=c_name, event_contact_dept=c_dept, event_contact_exec=7, event_contact_phone=c_phone, event_contact_email=c_email, event_details=details, is_published=True)
         e.pub_date = edate
         e.req_date = edate
         e.last_modified = edate
