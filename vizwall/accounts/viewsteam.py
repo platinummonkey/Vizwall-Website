@@ -18,7 +18,7 @@ def vizwallTeam(request):
   faculty = UserProfile.objects.all().filter(is_leadership_team=True, user__is_active=True).order_by('staff_position','rank_order', 'formal_name')
   for f in faculty:
     FACULTY.append((f.user,f))
-  return render_to_response('accounts/team.html', {'staff': STAFF, 'faculty': FACULTY})
+  return render_to_response('accounts/team.html', {'staff': STAFF, 'faculty': FACULTY}, context_instance=RequestContext(request))
 
 def login_view(request):
   username = request.POST['username']
@@ -38,5 +38,3 @@ def login_view(request):
 def logout_view(request):
   logout(request)
   return HttpResponseRedirect('/')
-
-

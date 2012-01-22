@@ -133,7 +133,7 @@ Accounts
 <td class=el_end colspan=6>&nbsp;</td>
 </tr>
 <tr>
-<td colspan=8 class=el_start><a href=#><strong>Create New Account</strong></a></td>
+<td colspan=8 class=el_start><a href="/admin/accounts/create/"><strong>Create New Account</strong></a></td>
 </tr>
 <tr class=el_title>
 <td class=el_start><strong>Username</strong></td>
@@ -154,7 +154,7 @@ Accounts
 <td align=center>{% if user.is_staff %}Yes{% else %}&nbsp;{% endif %}</td>
 <td align=center>{% if user.profile.is_scheduler %}Yes{% else %}&nbsp;{% endif %}</td>
 <td align=center>{% if user.profile.demo_presenter %}Yes{% else %}&nbsp;{% endif %}</td>
-<td class=el_end><a href="/admin/accounts/edit/{{ user.pk }}/">Edit</a> | <a href="/admin/accounts/delete/{{ user.pk }}/">Delete</a></td>
+<td class=el_end><a href="/admin/accounts/edit/{{ user.pk }}/">Edit</a> | {% if user.is_active %}<a href="/admin/accounts/deactivate/{{ user.pk }}/">Deactivate</a>{% else %}<a href="/admin/accounts/activate/{{ user.pk }}/">Activate</a>{% endif %}</td>
 </tr>
 {% endfor %}
 <tr>

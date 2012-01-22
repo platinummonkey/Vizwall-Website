@@ -11,7 +11,7 @@ def mail_send(recipients, event, templateBase, calendar=False, calendarCancel=Fa
   plaintext_t = get_template(templateBase+'.txt')
   html_t = get_template(templateBase+'.html')
   d = Context({'event': event})
-  subject_content = subject_t.render(d) 
+  subject_content = subject_t.render(d).rstrip() # need to strip off newline (SMTP error otherwise)
   plaintext_content = plaintext_t.render(d)
   html_content = html_t.render(d)
   msg = EmailMultiAlternatives(subject_content, plaintext_content, from_email, recipients)
@@ -26,7 +26,7 @@ def mail_send(recipients, event, templateBase, calendar=False, calendarCancel=Fa
       vevent.add('summary').value = event.event_title
       vevent.add('description').value = event.event_title
       vevent.add('status').value = 'ACTIVE'
-      vevent.add('uid').value = event.pk
+      vevent.add('uid').value = str(event.pk)
       vevent.add('dtstamp').value = datetime.datetime.now()
 
     else:
@@ -37,7 +37,7 @@ def mail_send(recipients, event, templateBase, calendar=False, calendarCancel=Fa
       vevent.add('summary').value = 'CANCELLED'
       vevent.add('description').value = 'CANCELLED'
       vevent.add('status').value = 'CANCELLED'
-      vevent.add('uid').value = event.pk
+      vevent.add('uid').value = str(event.pk)
       vevent.add('dtstamp').value = 'CANCELLED'
 
     icalstream = cal.serialize()
