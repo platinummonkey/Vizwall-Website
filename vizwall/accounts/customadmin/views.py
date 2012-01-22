@@ -88,7 +88,7 @@ def editUser(request, user_id, redirectURL='/admin/accounts/'):
     if form.is_valid():
       (user, userprofile) = form.update_user(user_id)
       if form.cleaned_data['reset_password'] == True and form.cleaned_data['is_active'] == True:
-        password = form.do_reset_password()
+        password = form.do_reset_password(user_id)
         email = form.cleaned_data['email']
         mail_send([email], password, 'mail/password_reset')
       if request.FILES.get('picture', False):
