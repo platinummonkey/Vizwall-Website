@@ -25,7 +25,7 @@ class Command(NoArgsCommand):
       audience = raw_input('Description of Audience: ')
       c_name = raw_input('Contact Name: ')
       c_phone = raw_input('Contact Phone: ')
-      if not c_phone: c_phone = '210-458-6479')
+      if not c_phone: c_phone = '210-458-6479'
       c_dept = raw_input('Contact Dept: ')
       if not c_dept: c_dept = 'Mechanical Engineering'
       c_email = raw_input('Contact Email: ')
