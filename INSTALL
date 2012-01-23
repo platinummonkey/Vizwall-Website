@@ -5,7 +5,8 @@
 4. create the database and update the django settings.py
 5. install django-filter and django-pagination:
   easy_install django-pagination
-  easy_install django-filter - you will need to apply the patches in django-filter_edits.txt!!!!
+  easy_install django-filter # you will need to apply the patches in django-filter_edits.txt!!!!
+  easy_install django-simple-captcha # you will need the Python Imaging Library (PIL) for this and the thumbnail generation for accounts and news articles
 6. cd in to the django directory:
   python manage.py syncdb
 7. Create a root web user
