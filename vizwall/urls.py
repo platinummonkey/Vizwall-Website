@@ -4,6 +4,10 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
+handler403 = 'vizwall.planarpages.views.error_403'
+handler404 = 'vizwall.planarpages.views.error_404'
+handler500 = 'vizwall.planarpages.views.error_500'
+
 urlpatterns = patterns('',
     # Example:
     # (r'^vizwall/', include('vizwall.foo.urls')),

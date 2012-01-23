@@ -12,5 +12,14 @@ def displayPage(request, pk_id, right=False):
   else:
     return render_to_response('planarpages/content.html',{'flatpage':fp},context_instance=RequestContext(request))
     
+def error_403(request):
+  fp = PlanarPage.objects.get(pk=7) # I know that 7 is the right one
+  return render_to_response('planarpages/content.html',{'flatpage':fp},context_instance=RequestContext(request))
 
+def error_404(request):
+  fp = PlanarPage.objects.get(pk=5) # I know that 5 is the right one
+  return render_to_response('planarpages/content.html',{'flatpage':fp},context_instance=RequestContext(request))
 
+def error_500(request):
+  fp = PlanarPage.objects.get(pk=6) # I know that 6 is the right one
+  return render_to_response('planarpages/content.html',{'flatpage':fp},context_instance=RequestContext(request))
