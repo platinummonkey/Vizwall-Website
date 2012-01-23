@@ -64,7 +64,7 @@ import urlparse
 ACCOUNTS_UPLOAD_ROOT = UPLOAD_ROOT + 'accounts/'
 ACCOUNTS_UPLOAD_URL = urlparse.urljoin(MEDIA_URL, 'accounts/')
 NEWS_UPLOAD_ROOT = UPLOAD_ROOT + 'news/'
-NEWS_UPLOAD_URL = urlparse.urljoin(MEDIA_URL, 'accounts/')
+NEWS_UPLOAD_URL = urlparse.urljoin(MEDIA_URL, 'news/')
 
 # user profiles
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
