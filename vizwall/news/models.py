@@ -12,7 +12,7 @@ class News(models.Model):
   pub_date = models.DateTimeField(auto_now_add=True)
   article = models.TextField(help_text='The news article text itself.')
   image = models.ImageField(upload_to='news/', default=NEWS_UPLOAD_URL+'news/default_picture.jpg', help_text='Select an image to upload', storage=upload_storage)
-  image_thumb = models.ImageField(upload_to='/media/news/thumbs', default=NEWS_UPLOAD_URL+'news/default_picture_thumb.jpg', help_text='Thumbnail image should be 80px x 80px')
+  image_thumb = models.ImageField(upload_to='news/', default=NEWS_UPLOAD_URL+'news/default_picture_thumb.jpg', help_text='Thumbnail image should be 80px x 80px', storage=upload_storage)
   outside_link = models.URLField(verify_exists=False, blank=True, null=True, help_text='An outside link to the original article if available')
   is_published = models.BooleanField(default=False, help_text='Publish this news item?')
   

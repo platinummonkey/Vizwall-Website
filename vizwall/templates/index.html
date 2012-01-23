@@ -12,9 +12,9 @@ Welcome
 
 {% for e in events %}
 <div class ="fp-event">
-<div class="calicon"><h1>{{ e.event_date|date:"M" }}</h1><h2> {{ e.event_date|date:"j" }}</h2></div>
+<div class="calicon"><a href="/events/event/{{ e.pk }}/" style="text-decoration:none;"><h1>{{ e.event_date|date:"M" }}</h1><h2> {{ e.event_date|date:"j" }}</h2></div>
 <span>{{ e.event_title|truncatewords:10 }}</span>
-<p>@ {{ e.event_date|date:"g:i A" }}</p>
+<p>@ {{ e.event_date|date:"g:i A" }}</p></a>
 </div>
 {% endfor %}
 
