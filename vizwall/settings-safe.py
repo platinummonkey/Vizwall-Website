@@ -92,8 +92,9 @@ EMAIL_USE_TLS = False
 ### Captcha ###
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 CAPTCHA_TIMEOUT = 10
-CAPTCHA_LENGTH = 7
-CAPTCHA_LETTER_ROTATION = (-45,45)
+CAPTCHA_LENGTH = 4
+CAPTCHA_FONT_SIZE = 45
+CAPTCHA_LETTER_ROTATION = (-33,33)
 CAPTCHA_OUTPUT_FORMAT = u'%(image)s %(hidden_field)s <br> %(text_field)s'
 CONTACT_FORM_EMAIL = 'ben.campos@utsa.edu'
 ### End Captcha ###
