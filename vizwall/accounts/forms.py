@@ -91,6 +91,7 @@ class UserFormAdmin(Form):
 from captcha.fields import CaptchaField
 from django.contrib.localflavor.us.forms import USPhoneNumberField
 from vizwall.settings import CONTACT_FORM_EMAIL
+from vizwall.mailer import mail_send
 class ContactSubmission():
   def __init__(self, subject, message, name, phone, email):
     self.subject = subject
@@ -109,8 +110,9 @@ class ContactForm(Form):
   captcha = CaptchaField()
 
   def save(self):
-    cs = ContactSubmission(self.subject, self.message, self.name, self.phone, self.email)
+    fd = self.cleaned_data
+    cs = ContactSubmission(fd['subject'], fd['message'], fd['name'], fd['phone'], fd['email'])
     mail_send([CONTACT_FORM_EMAIL], cs, 'mail/contact_form')
-    if self.cc_myself:
-      mail_send([self.email], cs, 'mail/contact_form')
+    if fd['cc_myself'] and fd['email']:
+      mail_send([fd['email']], cs, 'mail/contact_form')
     return cs
